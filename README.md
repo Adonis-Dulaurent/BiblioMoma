@@ -17,7 +17,7 @@ La présente application a été créé par Sidonie BASSAISTEGUY, Camille BATARD
 > 
 > - [Contribution](#Contribution)
 > 
-> - [Nous contacter](#Nous contacter)
+> - [Nous contacter](#Contacte)
 
 
 
@@ -63,7 +63,7 @@ Lignes directrices pour contribuer au projet :
 
 5. Créer un Pull Request 
 
-## Nous contacter
+## Contacte
 
 Sidonie BASSAISTEGUY - sidonie.bassaisteguy@chartes.psl.eu
 
