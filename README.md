@@ -63,7 +63,7 @@ Lignes directrices pour contribuer au projet :
 
 5. Créer un Pull Request 
 
-## Contacte
+## Contact
 
 Sidonie BASSAISTEGUY - sidonie.bassaisteguy@chartes.psl.eu
 
