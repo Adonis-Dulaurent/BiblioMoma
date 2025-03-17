@@ -5,6 +5,7 @@ from sqlalchemy import text
 from ..models.mapping import *
 
 
+
 @app.route('/test_db')
 def test_db():
     """
@@ -30,6 +31,3 @@ def test_mapping():
         return {"artists": artist_names if artist_names else "No artist found"}
     except Exception as e:
         return {"error": str(e)}
-
-
-
