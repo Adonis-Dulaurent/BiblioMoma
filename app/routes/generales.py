@@ -5,7 +5,6 @@ from sqlalchemy import text
 from ..models.mapping import *
 
 
-
 @app.route('/')
 def accueil():
     return render_template("pages/index.html")

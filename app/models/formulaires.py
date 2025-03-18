@@ -3,5 +3,4 @@ from wtforms import StringField, SelectField, SelectMultipleField, TextAreaField
 class AjoutUtilisateur(FlaskForm):
     #Formulaire pour ajouter un utilisateur 
     identifiant=StringField("identifiant", validators=[])
-    email=StringField("email", validators=[])
     password=PasswordField("password", validators=[])

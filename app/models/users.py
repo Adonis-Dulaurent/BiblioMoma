@@ -8,10 +8,9 @@ class Users(db.Model):
     id=db.Column(db.Integer, unique=True, nullable=False,primary_key=True, autoincrement=True)
     identifiant=db.Column(db.Text, nullable=False)
     password=db.Column(db.String(100), nullable=False)
-    email=db.Column(db.Text, nullable=False)
-
+  
     @staticmethod
-    def ajout(identifiant,password, email):
+    def ajout(identifiant,password):
         erreurs=[]
         "Gestion des erreurs si password vide, ou trop court et l'identifiant vide"
         if not identifiant:
@@ -22,16 +21,15 @@ class Users(db.Model):
             erreurs.append("le mot de passe est trop court")
 
         unique = Users.query.filter(
-            db.or_(Users.identifiant == identifiant, Users.email == email)).count()
+            db.or_(Users.identifiant == identifiant)).count()
         if unique > 0: 
-            erreurs.append("L'identifiant ou l'email existe déja")
+            erreurs.append("L'identifiant existe déja")
 
         if len(erreurs)>0:
             return False, erreurs
 
         utilisateur = Users(
             identifiant=identifiant,
-            email=email,
             password=generate_password_hash(password)
         )
 
