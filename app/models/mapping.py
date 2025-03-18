@@ -63,7 +63,7 @@ class Artworks(db.Model):
     BeginningDate = db.Column(db.Integer)
     EndDate = db.Column(db.Integer)
     Medium = db.Column(db.Text)
-    Dimension = db.Column(db.Text)
+    Dimensions = db.Column(db.Text)
     CreditLine = db.Column(db.Text)
     Classification = db.Column(db.Text)
     Department = db.Column(db.Text)
