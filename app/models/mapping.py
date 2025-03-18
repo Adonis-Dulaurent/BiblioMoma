@@ -29,9 +29,9 @@ class Artists(db.Model):
 
     artworks = db.relationship(
         "Artworks", 
-        backref="Artists", 
-        lazy=True
-        )
+        backref="Artists",
+        lazy='joined'    
+    )
 
     images = db.relationship(
         "ArtistsImages",
@@ -59,6 +59,7 @@ class Artworks(db.Model):
     __tablename__ = "Artworks"
 
     Title = db.Column(db.Text)
+    Artist = db.Column(db.Text)
     ConstituentID = db.Column(db.String(100), primary_key=True)
     BeginningDate = db.Column(db.Integer)
     EndDate = db.Column(db.Integer)
@@ -72,10 +73,12 @@ class Artworks(db.Model):
     ImageURL = db.Column(db.Text)
     
     # clé étrangère 
-    Artist = db.Column(
-        db.Text,
-        db.ForeignKey("Artists.DisplayName") #FIXME ici voir si la relation avec Artists s'est bien faite car on ne peut pas mettre deux primary keys dans une classe SQLalchemy donc possible de que soit faussé. 
+    ArtistWikiID = db.Column(
+        db.String(100),
+        db.ForeignKey("Artists.WikiID") #FIXME ici voir si la relation avec Artists s'est bien faite car on ne peut pas mettre deux primary keys dans une classe SQLalchemy donc possible de que soit faussé. 
     )
+    
+    # artist = db.relationship("Artists", backref="artworks", lazy="joined")  # TEST
 
     def __repr__(self):
         return f"<Artwork name={self.Title}>"

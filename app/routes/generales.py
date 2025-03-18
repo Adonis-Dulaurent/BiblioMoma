@@ -3,6 +3,7 @@ from flask import render_template
 from flask import jsonify
 from sqlalchemy import text
 from ..models.mapping import *
+from sqlalchemy.orm import joinedload
 
 
 @app.route('/')
@@ -34,6 +35,28 @@ def test_mapping():
         return {"artists": artist_names if artist_names else "No artist found"}
     except Exception as e:
         return {"error": str(e)}
+    
+
+from sqlalchemy.orm import joinedload
+
+@app.route('/api/artists/<artist_id>/artworks')
+def get_artist_artworks(artist_id):
+    artist = Artists.query.options(joinedload(Artists.artworks)).filter_by(WikiID=artist_id).first()
+
+    if not artist:
+        return jsonify({"error": "No artist found"}), 404
+
+    print(f"Nombre d'œuvres trouvées pour {artist.DisplayName} : {len(artist.artworks)}")  # DEBUG
+
+    return jsonify({
+        "id": artist.WikiID,
+        "name": artist.DisplayName,
+        "birth": artist.BirthDate,
+        "death": artist.DeathDate,
+        "nationality": artist.Nationality,
+        "artworks": [{"title": aw.Title, "medium": aw.Medium} for aw in artist.artworks]
+    })
+
 
 
 
