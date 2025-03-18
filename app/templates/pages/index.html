@@ -1,0 +1,60 @@
+{% extends "conteneur.html" %}
+
+{% block body %}
+    <!-- section principale -->
+    <main>
+    <div class="row">
+        <!-- Texte à gauche -->
+        <div class="col-md-6">
+            <h2>Présentation</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in bibendum arcu. Nullam at ligula turpis. Morbi sit amet sollicitudin sapien. Curabitur sit amet nisi dolor. Aliquam erat volutpat.</p>
+        </div>
+        
+        <!-- Carrousel d'images à droite -->
+        <div class="col-md-6">
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for i, image in enumerate(images) %}
+                        <div class="carousel-item {% if i == 0 %}active{% endif %}">
+                            <img src="{{ url_for('static', filename='images/' + image) }}" class="d-block w-100" alt="Oeuvre {{ i + 1 }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+         <!-- Lien vers la page Le MoMA en 100 oeuvres et artistes -->
+    <div>
+        <p><a href="moma100art.html">Le MoMA en 100 oeuvres et artistes</a></p>
+    </div>
+    </div>
+<!-- Dans app.py : 
+             @app.route('/')
+def home():
+    images = [f'oeuvre{i}.jpg' for i in range(1, 101)]  # Génère 'oeuvre1.jpg' à 'oeuvre100.jpg'
+    return render_template('index.html', images=images)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    -->
+
+
+    <!-- Barre de recherche et lien vers la recherche avancée-->
+    <div class="text-center mt-5">
+        <input type="text" class="form-control w-50" placeholder="Rechercher...">
+        <a href="rechercheavancee.html" class="btn btn-secondary">Recherche avancée</a>
+    </div>
+
+    <!-- Bouton générer une page random -->
+    <div class="text-center mt-4">
+        <button class="btn btn-danger" onclick="window.location.href='/page-random'">Générer une page aléatoire</button>
+    </div>
+    </main>
+{% endblock %}
