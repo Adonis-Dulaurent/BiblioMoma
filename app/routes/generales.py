@@ -6,7 +6,8 @@ from ..models.mapping import *
 
 
 @app.route('/')
-def accueil():
+@app.route('/home')
+def acceuil():
     return render_template("pages/index.html")
 
 @app.route('/test_db')
