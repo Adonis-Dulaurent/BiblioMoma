@@ -1,7 +1,7 @@
 from flask import url_for, render_template, redirect, request, flash
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 from ..models.users import User
-from ..models.formulaires import AjoutUtilisateur
+from ..models.formulaires import AjoutUtilisateur, Connexion
 from ..utils.transformations import clean_arg
 from ..app import app, db, login
 
@@ -28,7 +28,7 @@ def ajout_utilisateur():
 
 @app.route("/utilisateurs/connexion", methods=["GET","POST"])
 def connexion():
-    form = connexion()
+    form = Connexion()
 
     if current_user.is_authenticated is True:
         flash("Vous êtes déjà connecté", "info")
@@ -36,13 +36,14 @@ def connexion():
 
     if form.validate_on_submit():
         utilisateur = User.identification(
-            prenom=clean_arg(request.form.get("prenom", None)),
-            password=clean_arg(request.form.get("password", None))
+            pseudo=clean_arg(request.form.get("pseudo", None)),
+            password=clean_arg(request.form.get("password", None)),
+            email=clean_arg(request.form.get("email", None))
         )
         if utilisateur:
             flash("Connexion effectuée", "success")
             login_user(utilisateur)
-            return redirect(url_for("accueil"))
+            return render_template(url_for("accueil"))
         else:
             flash("Les identifiants n'ont pas été reconnus", "error")
             return render_template("pages/connexion.html", form=form)
@@ -50,4 +51,12 @@ def connexion():
     else:
         return render_template("pages/connexion.html", form=form)
 
+@app.route("/utilisateurs/deconnexion", methods=["POST", "GET"])
+def deconnexion():
+    if current_user.is_authenticated is True:
+        logout_user()
+    flash("vous êtes déconnecté", "info")
+    return redirect(url_for("acceuil"))
+
 login.login_view = 'connexion'
+

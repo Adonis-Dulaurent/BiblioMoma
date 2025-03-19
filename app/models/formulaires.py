@@ -8,5 +8,6 @@ class AjoutUtilisateur(FlaskForm):
     email=StringField("email", validators=[])
 
 class Connexion(FlaskForm):
-    prenom = StringField("prenom", validators=[])
+    pseudo=StringField("pseudo", validators=[])         
     password = PasswordField("password", validators=[])
+    email = StringField("email", validators=[])

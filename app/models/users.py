@@ -8,7 +8,14 @@ class User(UserMixin, db.Model):
     pseudo = db.Column(db.Text, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     email = db.Column(db.Text, nullable=False)
-    
+
+    @staticmethod
+    def identification(pseudo, password, email):
+        utilisateur = User.query.filter(User.pseudo == pseudo, User.email == email).first()
+        if utilisateur and check_password_hash(utilisateur.password, password):
+            return utilisateur
+        return None
+
     @staticmethod
     def ajout(pseudo, password, email):
         erreurs = []
@@ -42,6 +49,7 @@ class User(UserMixin, db.Model):
         except Exception as erreur:
             return False, [str(erreur)]
     
+    
     def get_id(self):
         return self.id
     
@@ -50,8 +58,8 @@ def get_user_by_id(id):
     return User.query.get(int(id))
 
 @staticmethod
-def identification(pseudo, password):
-    utilisateur = User.query.filter(User.pseudo == pseudo).first()
+def identification(pseudo, password, email):
+    utilisateur = User.query.filter(User.pseudo == pseudo, User.email == email).first()
     if utilisateur and check_password_hash(utilisateur.password, password):
         return utilisateur
     return None
