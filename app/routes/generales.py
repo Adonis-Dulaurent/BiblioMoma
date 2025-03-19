@@ -7,9 +7,6 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import sessionmaker
 
 
-Session = sessionmaker()
-session = Session()
-
 
 @app.route('/')
 def accueil():
@@ -42,8 +39,11 @@ def test_mapping():
         return {"error": str(e)}
     
 
-@app.route('/oeuvres')  # /<artist_id>
-def oeuvres_par_artiste():
-    artworks = Artworks.query.filter(Artworks.ArtistWikiID == "Q153104").all()
-    return render_template("pages/temp_affichage.html", oeuvres=artworks)
-
+@app.route('/oeuvres/<id_artist>')
+def oeuvres_par_artiste(id_artist):
+    
+    # Requête SQL directe
+    result = db.session.execute(text(f"SELECT Title FROM Artworks WHERE ArtistWikiID = '{id_artist}'"))
+    titles = [row[0] for row in result]
+    
+    return render_template("pages/temp_affichage.html", titles=titles, count=len(titles))
