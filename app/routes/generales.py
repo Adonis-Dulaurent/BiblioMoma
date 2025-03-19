@@ -9,6 +9,11 @@ from ..models.mapping import *
 def accueil():
     return render_template("pages/index.html")
 
+@app.route('/cent_oeuvres_artistes')
+def cent_oeuvres_artistes():
+    return render_template("pages/100_oeuvres_artistes.html")
+
+
 @app.route('/test_db')
 def test_db():
     """

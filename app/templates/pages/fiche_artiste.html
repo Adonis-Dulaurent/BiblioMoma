@@ -1,0 +1,27 @@
+{% extends "conteneur.html" %}
+
+{% block body %}
+    <div class="container mt-5 text-center">
+        <!-- Titre centré (nom de l'artiste ou de l'oeuvre) -->
+        <h1>{{ DisplayName }}</h1>
+
+        <!-- Image principale -->
+        <div class="mt-4">
+            <img src="{{ image_url }}" alt="{{ titre }}" class="img-fluid">
+        </div>
+
+        <!-- Texte-->
+        <div class="mt-5 text-start"></div>
+            <div class="mt-4">
+                <h2>Description</h2>
+                <p>{{DisplayName}} is an artist of {{Nationality}} nationality who was born on {{BirthDate}} and passed away on {{DeathDate}}. As a {{Gender}}, the artist made a significant impact through works that belong to the {{Mouvement}} movement and explore {{Genre}} genre.</p>
+            </div>
+
+            <div class="mt-4">
+                <h2>Bibliography</h2>
+                <p>En attente</p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
