@@ -1,0 +1,27 @@
+{% extends "conteneur.html" %}
+
+{% block body %}
+    <div class="container mt-5 text-center">
+        <!-- Titre centré (nom de l'oeuvre) -->
+        <h1>{{ titre }}</h1>
+
+        <!-- Image principale -->
+        <div class="mt-4">
+            <img src="{{ image_url }}" alt="{{ titre }}" class="img-fluid">
+        </div>
+
+        <!-- Texte-->
+        <div class="mt-5 text-start"></div>
+            <div class="mt-4">
+                <h2>Description</h2>
+                <p>"{{Title}}, created by {{Artist}} in {{BeginningDate}} - {{EndDate}}, is a work housed in the {{Department}}. Classified under the {{Classification}} category, it was acquired by the MoMA in {{DateAcquired}} through {{CreditLine}}. This piece, made with {{Medium}}, has dimensions of {{Dimensions}}.</p>
+            </div>
+
+            <div class="mt-4">
+                <h2>Bibliography</h2>
+                <p>En attente</p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
