@@ -30,7 +30,6 @@ class Artists(db.Model):
     artworks = db.relationship(
         "Artworks", 
         backref="Artists",
-        lazy=True    
     )
 
     images = db.relationship(

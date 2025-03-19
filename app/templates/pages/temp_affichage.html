@@ -3,14 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de l'artiste et œuvres</title>
+    <title>Œuvres d'artiste</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .artwork { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; }
+        .title { font-weight: bold; font-size: 18px; }
+        .info { margin-top: 5px; color: #555; }
+    </style>
 </head>
 <body>
-    <div>{{ oeuvres }}</div>
-
-    {% for oeuvre in oeuvres %}
-    <div>{{ oeuvre.Title }}</div>
-    {% endfor %}
-    <div>{{ debug }}</div>
+    <h1>Liste des œuvres</h1>
+    
+    {% if oeuvres %}
+        <p>Nombre d'œuvres trouvées : {{ oeuvres|length }}</p>
+        
+        {% for oeuvre in oeuvres %}
+            <div class="artwork">
+                <div class="title">{{ oeuvre.Title }}</div>
+                <div class="info">Artiste : {{ oeuvre.Artist }}</div>
+                <div class="info">Date : {{ oeuvre.BeginningDate }}{% if oeuvre.EndDate and oeuvre.EndDate != oeuvre.BeginningDate %} - {{ oeuvre.EndDate }}{% endif %}</div>
+                <div class="info">Médium : {{ oeuvre.Medium }}</div>
+                <div class="info">Dimensions : {{ oeuvre.Dimensions }}</div>
+                {% if oeuvre.ImageURL %}
+                    <div class="info">
+                        <a href="{{ oeuvre.url }}" target="_blank">Voir sur le site du MoMA</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Aucune œuvre trouvée pour cet artiste.</p>
+    {% endif %}
+    
+    <div>
+        <p><a href="/">Retour à l'accueil</a></p>
+    </div>
 </body>
 </html>

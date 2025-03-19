@@ -44,14 +44,6 @@ def test_mapping():
 
 @app.route('/oeuvres')  # /<artist_id>
 def oeuvres_par_artiste():
-    # Récupère toutes les œuvres de Vincent van Gogh
-    van_list = []
-    artworks = Artworks.query.all()
-    
-    for artwork in artworks:
-        if artwork is not None and artwork.Department is not None:
-            if "Drawing" in artwork.Department:
-                van_list.append(artwork)
-    
-    return render_template("pages/temp_affichage.html", oeuvres=van_list)
+    artworks = Artworks.query.filter(Artworks.ArtistWikiID == "Q153104").all()
+    return render_template("pages/temp_affichage.html", oeuvres=artworks)
 
