@@ -30,13 +30,12 @@ class Artists(db.Model):
     artworks = db.relationship(
         "Artworks", 
         backref="Artists",
-        lazy='joined'    
+        lazy=True    
     )
 
     images = db.relationship(
         "ArtistsImages",
         backref="Artists",
-        lazy=True 
     )
 
     artistsmovements = db.relationship(
@@ -78,7 +77,6 @@ class Artworks(db.Model):
         db.ForeignKey("Artists.WikiID") #FIXME ici voir si la relation avec Artists s'est bien faite car on ne peut pas mettre deux primary keys dans une classe SQLalchemy donc possible de que soit faussé. 
     )
     
-    # artist = db.relationship("Artists", backref="artworks", lazy="joined")  # TEST
 
     def __repr__(self):
         return f"<Artwork name={self.Title}>"

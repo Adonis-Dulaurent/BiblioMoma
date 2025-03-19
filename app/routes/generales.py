@@ -1,9 +1,14 @@
 from ..app import app, db
-from flask import render_template
+from flask import render_template, abort
 from flask import jsonify
-from sqlalchemy import text
+from sqlalchemy import text 
 from ..models.mapping import *
 from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import sessionmaker
+
+
+Session = sessionmaker()
+session = Session()
 
 
 @app.route('/')
@@ -37,26 +42,16 @@ def test_mapping():
         return {"error": str(e)}
     
 
-from sqlalchemy.orm import joinedload
-
-@app.route('/api/artists/<artist_id>/artworks')
-def get_artist_artworks(artist_id):
-    artist = Artists.query.options(joinedload(Artists.artworks)).filter_by(WikiID=artist_id).first()
-
-    if not artist:
-        return jsonify({"error": "No artist found"}), 404
-
-    print(f"Nombre d'œuvres trouvées pour {artist.DisplayName} : {len(artist.artworks)}")  # DEBUG
-
-    return jsonify({
-        "id": artist.WikiID,
-        "name": artist.DisplayName,
-        "birth": artist.BirthDate,
-        "death": artist.DeathDate,
-        "nationality": artist.Nationality,
-        "artworks": [{"title": aw.Title, "medium": aw.Medium} for aw in artist.artworks]
-    })
-
-
-
+@app.route('/oeuvres')  # /<artist_id>
+def oeuvres_par_artiste():
+    # Récupère toutes les œuvres de Vincent van Gogh
+    van_list = []
+    artworks = Artworks.query.all()
+    
+    for artwork in artworks:
+        if artwork is not None and artwork.Department is not None:
+            if "Drawing" in artwork.Department:
+                van_list.append(artwork)
+    
+    return render_template("pages/temp_affichage.html", oeuvres=van_list)
 
