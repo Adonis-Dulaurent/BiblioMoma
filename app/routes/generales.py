@@ -11,7 +11,19 @@ def accueil():
 
 @app.route('/cent_oeuvres_artistes')
 def cent_oeuvres_artistes():
-    return render_template("pages/100_oeuvres_artistes.html")
+    return render_template("pages/cent_oeuvres_artistes.html")
+
+@app.route('/documentation_reproductibilite')
+def documentation_reproductibilite():
+    return render_template("pages/documentation_reproductibilite.html")
+
+@app.route('/mode_emploi')
+def mode_emploi():
+    return render_template("pages/mode_emploi.html")
+
+@app.route('/recherche_avancee')
+def recherche_avancee():
+    return render_template("pages/recherche_avancee.html")
 
 
 @app.route('/test_db')
@@ -39,6 +51,3 @@ def test_mapping():
         return {"artists": artist_names if artist_names else "No artist found"}
     except Exception as e:
         return {"error": str(e)}
-
-
-
