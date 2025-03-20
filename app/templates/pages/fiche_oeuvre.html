@@ -14,7 +14,8 @@
         <div class="mt-5 text-start"></div>
             <div class="mt-4">
                 <h2>Description</h2>
-                <p>"{{Title}}, created by {{Artist}} in {{BeginningDate}} - {{EndDate}}, is a work housed in the {{Department}}. Classified under the {{Classification}} category, it was acquired by the MoMA in {{DateAcquired}} through {{CreditLine}}. This piece, made with {{Medium}}, has dimensions of {{Dimensions}}.</p>
+                {% for info in details %}
+                <p>"{{info.Title}}, created by {{info.Artist}} in {{info.BeginningDate}} - {{info.EndDate}}, is a work housed in the {{info.Department}}. Classified under the {{Classification}} category, it was acquired by the MoMA in {{info.DateAcquired}} through {{info.CreditLine}}. This piece, made with {{info.Medium}}, measures {{info.Dimensions}}.</p>
             </div>
 
             <div class="mt-4">
