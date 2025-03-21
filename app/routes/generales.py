@@ -44,6 +44,15 @@ def test_mapping():
         return {"error": str(e)}
     
 
+@app.route('/guide')
+def guide():
+    return render_template("pages/mode_emploi.html")
+
+@app.route('/documentation')
+def documentation():
+    return render_template("pages/documentation_reproductibilite.html")
+
+
 
 @app.route("/artistes/<id_artist>")
 def fiche_artiste(id_artist):
