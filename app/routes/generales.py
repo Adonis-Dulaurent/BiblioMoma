@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 @app.route('/')
+@app.route('/home')
 def accueil():
     return render_template("pages/index.html")
 
