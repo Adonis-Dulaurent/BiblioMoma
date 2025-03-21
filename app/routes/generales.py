@@ -124,3 +124,11 @@ def fiche_oeuvre(id_oeuvre):
 
 
     return render_template("pages/fiche_oeuvre.html", details=oeuvre)        
+  
+@app.route('/guide')
+def guide():
+    return render_template("pages/mode_emploi.html")
+
+@app.route('/documentation')
+def documentation():
+    return render_template("pages/documentation_reproductibilite.html")
