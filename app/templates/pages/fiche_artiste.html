@@ -1,0 +1,55 @@
+{% extends "partials/conteneur.html" %}
+
+{% block body %}
+    <div class="container mt-5 text-center">
+        <!-- Titre centré (nom de l'artiste ou de l'oeuvre) -->
+         {% for data in bio %}
+        <h1>{{ data.DisplayName }}</h1>
+
+        <!-- Image principale -->
+        <div class="mt-4">
+            <img src="{{ image }}" alt="{{ data.DisplayName }}" class="img-fluid">
+        </div>
+
+        <!-- Texte-->
+        <div class="mt-5 text-start"></div>
+            <div class="mt-4">
+                <h2>Description</h2>
+                <p>{{data.DisplayName}} is a {{data.Nationality}} artist who was born in {{data.BirthDate}} and passed away in {{data.DeathDate}}.
+                    <h4>Affiliated artistic mouvements</h4>
+                    {% for movement in movements %}
+                    <li>
+                        <ul>{{movement}}</ul>
+                    </li>
+                    {% endfor %}
+                    <h4>Affiliated genres</h4>
+                    {% for genre in genres %}
+                    <li>
+                        <ul>{{genre}}</ul>
+                    </li>
+                    {% endfor %}
+                    <h4>Artworks</h4>
+                    <ul>
+                        {% for artwork in artworks %}
+                        <li>
+                            <a href="{{ url_for('fiche_oeuvre', id_oeuvre=artwork[2]) }}">
+                                {{ artwork[0] }}
+                            </a>
+                            <br>
+                            <img src="{{ artwork[1] }}" alt="{{ artwork[0] }}" class="img-fluid">
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+
+            </p>
+            </div>
+        {% endfor %}
+            <div class="mt-4">
+                <h2>Bibliography</h2>
+                <p>En attente</p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
