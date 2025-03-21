@@ -1,19 +1,20 @@
 {% extends "partials/conteneur.html" %}
 
-{% block body %}
-    <div class="container mt-5 text-center">
+{% block contenu %}
+    <div class="fiche_artiste">
+    <div class="titre_artiste">
         <!-- Titre centré (nom de l'artiste ou de l'oeuvre) -->
          {% for data in bio %}
-        <h1>{{ data.DisplayName }}</h1>
+        <h2>{{ data.DisplayName }}</h1>
 
         <!-- Image principale -->
-        <div class="mt-4">
+        <div class="image_artiste">
             <img src="{{ image }}" alt="{{ data.DisplayName }}" class="img-fluid">
         </div>
 
         <!-- Texte-->
-        <div class="mt-5 text-start"></div>
-            <div class="mt-4">
+        <div class="texte_artiste"></div>
+            <div class="artist_table">
                 <h2>Description</h2>
                 <p>{{data.DisplayName}} is a {{data.Nationality}} artist who was born in {{data.BirthDate}} and passed away in {{data.DeathDate}}.
                     <h4>Affiliated artistic mouvements</h4>
@@ -44,8 +45,9 @@
 
             </p>
             </div>
+        </div>
         {% endfor %}
-            <div class="mt-4">
+            <div class="biblio_artiste">
                 <h2>Bibliography</h2>
                 <p>En attente</p>
             </div>
