@@ -137,6 +137,48 @@ p {
     height: auto;
 }
 
+/* fiches artistes */
+.fiche_artiste {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+.titre_artiste {
+    align-content: center;
+    justify-content: center;
+}
+.titre_artiste h2 {
+    justify-content: center;
+    align-content: center;
+}
+
+.image_artiste {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+.image_artiste img {
+    max-width: 25%;
+    height: auto;
+}
+.artist_table {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-content: center;
+}
+.artist_table img {
+    max-width: 20%;
+    height: auto;
+}
+
+/* fiches oeuvres */
+.fiche_oeuvre {
+    display: flex;
+    flex-direction: column;
+}
+
 /* ----- liens ------ */
 a {
     text-decoration: underline;
