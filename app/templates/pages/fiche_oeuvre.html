@@ -14,7 +14,15 @@
         <div class="mt-5 text-start"></div>
             <div class="mt-4">
                 <h2>Description</h2>
-                <p>"{{details.Title}}", created by {{details.Artist}} in {{details.BeginningDate}} - {{details.EndDate}}, is a work housed in the {{details.Department}}. Classified under the {{details.Classification}} category, it was acquired by the MoMA in {{details.DateAcquired}} through {{details.CreditLine}}. This piece, made with {{details.Medium}}, measures {{details.Dimensions}}.</p>
+                <p>
+                    "{{ details.Title }}", created by 
+                    <a href="{{ url_for('fiche_artiste', id_artist=details.ArtistWikiID) }}">
+                        {{ details.Artist }}
+                    </a> 
+                    in {{ details.BeginningDate }} - {{ details.EndDate }}, is a work housed in the {{ details.Department }}.
+                </p>
+                
+                <p>Classified under the {{details.Classification}} category, it was acquired by the MoMA in {{details.DateAcquired}} through {{details.CreditLine}}. This piece, made with {{details.Medium}}, measures {{details.Dimensions}}.</p>
             </div>
 
             <div class="mt-4">

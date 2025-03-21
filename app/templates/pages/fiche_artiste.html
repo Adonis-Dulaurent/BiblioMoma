@@ -29,12 +29,18 @@
                     </li>
                     {% endfor %}
                     <h4>Artworks</h4>
-                    {% for artwork in artworks %}
-                    <li>
-                        <ul>{{artwork[0]}}</ul>
-                        <img src="{{ artwork[1] }}" alt="{{ artwork[0] }}" class="img-fluid">
-                    </li>
-                    {% endfor %}
+                    <ul>
+                        {% for artwork in artworks %}
+                        <li>
+                            <a href="{{ url_for('fiche_oeuvre', id_oeuvre=artwork[2]) }}">
+                                {{ artwork[0] }}
+                            </a>
+                            <br>
+                            <img src="{{ artwork[1] }}" alt="{{ artwork[0] }}" class="img-fluid">
+                        </li>
+                        {% endfor %}
+                    </ul>
+
 
             </p>
             </div>
