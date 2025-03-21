@@ -16,6 +16,14 @@ def accueil():
 def cent_oeuvres_artistes():
     return render_template("pages/100_oeuvres_artistes.html")
 
+@app.route('/guide')
+def guide():
+    return render_template("pages/mode_emploi.html")
+
+@app.route('/documentation')
+def documentation():
+    return render_template("pages/documentation_reproductibilite.html")
+
 
 @app.route('/test_db')
 def test_db():
@@ -43,16 +51,6 @@ def test_mapping():
     except Exception as e:
         return {"error": str(e)}
     
-
-@app.route('/guide')
-def guide():
-    return render_template("pages/mode_emploi.html")
-
-@app.route('/documentation')
-def documentation():
-    return render_template("pages/documentation_reproductibilite.html")
-
-
 
 @app.route("/artistes/<id_artist>")
 def fiche_artiste(id_artist):
@@ -83,7 +81,7 @@ def fiche_artiste(id_artist):
 
     movements_list = []
     genres_list = []
-    artworks_list = db.session.execute(text(f"SELECT Title, ImageURL FROM Artworks WHERE ArtistWikiID = '{id_artist}'"))
+    artworks_list = db.session.execute(text(f"SELECT Title, ImageURL, id FROM Artworks WHERE ArtistWikiID = '{id_artist}'"))
 
     img = None
 
@@ -124,11 +122,3 @@ def fiche_oeuvre(id_oeuvre):
 
 
     return render_template("pages/fiche_oeuvre.html", details=oeuvre)        
-  
-@app.route('/guide')
-def guide():
-    return render_template("pages/mode_emploi.html")
-
-@app.route('/documentation')
-def documentation():
-    return render_template("pages/documentation_reproductibilite.html")
