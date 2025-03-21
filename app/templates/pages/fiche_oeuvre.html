@@ -1,21 +1,20 @@
-{% extends "conteneur.html" %}
+{% extends "partials/conteneur.html" %}
 
 {% block body %}
     <div class="container mt-5 text-center">
         <!-- Titre centré (nom de l'oeuvre) -->
-        <h1>{{ titre }}</h1>
+        <h1>{{ details.Title }}</h1>
 
         <!-- Image principale -->
         <div class="mt-4">
-            <img src="{{ image_url }}" alt="{{ titre }}" class="img-fluid">
+            <img src="{{ details.ImageURL }}" alt="{{ details.Titre }}" class="img-fluid">
         </div>
 
         <!-- Texte-->
         <div class="mt-5 text-start"></div>
             <div class="mt-4">
                 <h2>Description</h2>
-                {% for info in details %}
-                <p>"{{info.Title}}, created by {{info.Artist}} in {{info.BeginningDate}} - {{info.EndDate}}, is a work housed in the {{info.Department}}. Classified under the {{Classification}} category, it was acquired by the MoMA in {{info.DateAcquired}} through {{info.CreditLine}}. This piece, made with {{info.Medium}}, measures {{info.Dimensions}}.</p>
+                <p>"{{details.Title}}", created by {{details.Artist}} in {{details.BeginningDate}} - {{details.EndDate}}, is a work housed in the {{details.Department}}. Classified under the {{details.Classification}} category, it was acquired by the MoMA in {{details.DateAcquired}} through {{details.CreditLine}}. This piece, made with {{details.Medium}}, measures {{details.Dimensions}}.</p>
             </div>
 
             <div class="mt-4">

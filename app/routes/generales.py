@@ -44,15 +44,6 @@ def test_mapping():
         return {"error": str(e)}
     
 
-@app.route('/oeuvres/<id_artist>')
-def oeuvres_par_artiste(id_artist):
-    
-    # Requête SQL directe
-    result = db.session.execute(text(f"SELECT Title FROM Artworks WHERE ArtistWikiID = '{id_artist}'"))
-    titles = [row[0] for row in result]
-    
-    return render_template("pages/temp_affichage.html", titles=titles, count=len(titles))
-
 
 @app.route("/artistes/<id_artist>")
 def fiche_artiste(id_artist):
@@ -106,10 +97,21 @@ def fiche_artiste(id_artist):
 
 @app.route("/oeuvres/<id_oeuvre>")
 def fiche_oeuvre(id_oeuvre):
-    oeuvre = Artworks.query.filter(Artworks.ArtworkID == id_oeuvre).first()
+    """Affiche la fiche détaillée d'une œuvre d'art.
+
+    Args:
+        id_oeuvre (str): L'identifiant unique de l'œuvre à afficher.
+
+    Returns:
+        tuple: 
+            - Une page HTML affichant les détails de l'œuvre si elle est trouvée.
+            - Une page d'erreur avec un code 404 si l'œuvre n'existe pas.
+    """
+    oeuvre = Artworks.query.filter(Artworks.id == id_oeuvre).first()
 
     if not oeuvre:
         return render_template("pages/error.html", message="Artiste non trouvé"), 404
     
 
-    return render_template("pages/fiche_oeuvre.html", details=...)        
+
+    return render_template("pages/fiche_oeuvre.html", details=oeuvre)        
