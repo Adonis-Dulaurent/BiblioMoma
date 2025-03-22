@@ -12,4 +12,4 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 
 
-from .routes import generales
+from .routes import generales, users
