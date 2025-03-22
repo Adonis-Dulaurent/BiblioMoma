@@ -52,7 +52,6 @@ def test_mapping():
     except Exception as e:
         return {"error": str(e)}
     
-
 @app.route("/artistes/<id_artist>")
 def fiche_artiste(id_artist):
     """
