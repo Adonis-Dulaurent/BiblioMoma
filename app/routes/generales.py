@@ -50,6 +50,9 @@ def test_mapping():
         artist_names = [artist.DisplayName for artist in artists if artist is not None]  
         return {"artists": artist_names if artist_names else "No artist found"}
     except Exception as e:
+<<<<<<< HEAD
+        return {"error": str(e)}
+=======
         return {"error": str(e)}
     
 
@@ -123,3 +126,4 @@ def fiche_oeuvre(id_oeuvre):
 
 
     return render_template("pages/fiche_oeuvre.html", details=oeuvre)        
+>>>>>>> main
