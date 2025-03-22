@@ -65,8 +65,3 @@ def identification(pseudo, password, email):
         return utilisateur
     return None
 
-
-class Panier (db.Model):
-    __tablename__="panier"
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = 
