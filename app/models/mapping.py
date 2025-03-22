@@ -71,11 +71,12 @@ class Artworks(db.Model):
     DateAcquired = db.Column(db.String(100))
     url = db.Column(db.Text)
     ImageURL = db.Column(db.Text)
+    Artist = db.Column(db.Text)
     
     # clé étrangère 
-    Artist = db.Column(
-        db.Text,
-        db.ForeignKey("Artists.DisplayName") #FIXME ici voir si la relation avec Artists s'est bien faite car on ne peut pas mettre deux primary keys dans une classe SQLalchemy donc possible de que soit faussé. 
+    ArtistWikiID = db.Column(
+        db.String(100),
+        db.ForeignKey("Artists.WikiID")
     )
 
     def __repr__(self):
