@@ -1,5 +1,5 @@
 from flask import url_for, render_template, redirect, request, flash
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from ..models.users import User, Panier
 from ..models.formulaires import AjoutUtilisateur, Connexion
 from ..utils.transformations import clean_arg
@@ -61,7 +61,9 @@ def deconnexion():
 login.login_view = 'connexion'
 
 @app.route("/utilisateurs/panier")
-def afficher_panier():  
+@login_required
+def afficher_panier(): 
+   
     """
     afficher le panier de l'utilisateur 
     """
@@ -69,6 +71,6 @@ def afficher_panier():
     if not current_user.is_authenticated:
         flash("You must be logged in to access your basket")
         return redirect(url_for("connexion", next=request.path))
-        
+
     panier = Panier.obtenir_panier_utilisateur(current_user.id)
     return render_template('pages/panier.html', panier=panier)
