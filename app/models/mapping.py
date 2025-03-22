@@ -39,7 +39,7 @@ class Artists(db.Model):
         lazy=True 
     )
 
-    artistsmovements = db.relationship(
+    movements = db.relationship(
         "Movements",
         secondary=ArtistsMovements,
         backref="Artists"
@@ -59,7 +59,8 @@ class Artworks(db.Model):
     __tablename__ = "Artworks"
 
     Title = db.Column(db.Text)
-    ConstituentID = db.Column(db.String(100), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    ConstituentID = db.Column(db.String(100))
     BeginningDate = db.Column(db.Integer)
     EndDate = db.Column(db.Integer)
     Medium = db.Column(db.Text)
