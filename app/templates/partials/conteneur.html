@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliomoma</title>
-    {% include "partials/metadata.html" %}
-    {% include "partials/css.html" %}
-    {% include "partials/js.html" %}
+    <link rel="stylesheet" href="../statics/stylesheet.css">
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
 </head>
@@ -42,22 +42,50 @@
                 
             </div>
 
+    <!-- header -->
+     <header>
+        <h1><a href="index.html">BiblioMoMA</a></h1>
+        <nav class="topnav" id="myTopnav">
+            <a href="/" class="active">Home</a>
+            <a href="/guide">Instructions</a>
+            <a href="#">The MoMA in 100 artworks and artists</a>
+            <a href="#">Advanced search</a>
+            <a href="/documentation">Documentation and reproductibility</a>
+            <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+                ☰</a>
+        </nav>  
+    </header> 
+
+    <script> /* Le menu ne s'affiche pas correctement sur mobile sans bidouiller javascript */
+        function toggleMenu() {
+          var x = document.getElementById("myTopnav");
+          if (x.className === "topnav") {
+            x.className += " responsive";
+          } else {
+            x.className = "topnav";
+          }
+        }
+    </script>
 
     <!-- contenu principal -->
-    <div class="container mt-5">
-        {% block body %}{% endblock %}
+    <div class="container">
+        {% block contenu %}{% endblock %}
     </div>
 
     <!--footer -->
-    <footer class="bg-light text-center mt-5 py-3">
+    <footer>
         <div>
-        <p class="footer_title">Mentions légales</p>
-        <p>Informations légales du site...</p>
+            <p>© 2025 BiblioMoMA</p>
+        </div>
+        <div>
+        <p class="footer_title">Legal mentions</p>
+        <p>Legal info...</p>
         </div>
         <div>
         <p class="footer_title">Contact</p>
         <p>Email: contact@site.com | Téléphone: 0123456789</p>
         </div>
     </footer>
+
 </body>
 </html>

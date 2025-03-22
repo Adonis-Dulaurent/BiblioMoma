@@ -1,0 +1,37 @@
+{% extends "partials/conteneur.html" %}
+
+{% block contenu %}
+    <div class="fiche_oeuvre">
+    <div>
+        <!-- Titre centré (nom de l'oeuvre) -->
+        <h1>{{ details.Title }}</h1>
+
+        <!-- Image principale -->
+        <div class="image_oeuvre">
+            <img src="{{ details.ImageURL }}" alt="{{ details.Titre }}" class="img-fluid">
+        </div>
+
+        <!-- Texte-->
+        <div class="texte_oeuvre"></div>
+            <div class="mt-4">
+                <h2>Description</h2>
+                <p>
+                    "{{ details.Title }}", created by 
+                    <a href="{{ url_for('fiche_artiste', id_artist=details.ArtistWikiID) }}">
+                        {{ details.Artist }}
+                    </a> 
+                    in {{ details.BeginningDate }} - {{ details.EndDate }}, is a work housed in the {{ details.Department }}.
+                </p>
+                
+                <p>Classified under the {{details.Classification}} category, it was acquired by the MoMA in {{details.DateAcquired}} through {{details.CreditLine}}. This piece, made with {{details.Medium}}, measures {{details.Dimensions}}.</p>
+            </div>
+
+            <div class="biblio_oeuvre">
+                <h2>Bibliography</h2>
+                <p>En attente</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

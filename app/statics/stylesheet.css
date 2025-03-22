@@ -1,0 +1,263 @@
+@font-face {
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	src: url("fonts/franklin-gothic/FranklinGothic.ttf") format("ttf");
+}
+
+/* ------ header ------ */
+header {
+    padding: 20px;
+    width: 100%;
+    background-color: white;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+header h1 {
+    font-size: 3em;
+    color: black;
+    font-weight: bolder;
+    text-decoration: none;
+    padding: 10px 15px;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: black;
+}
+
+.topnav {
+    margin-top: 8px;
+    overflow: hidden;
+    background-color: white;
+}
+
+.topnav a {
+    float: left;
+    display: block;
+    text-align: left;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    padding: 10px 15px;
+    position: relative;
+}
+
+.topnav a:hover {
+    text-decoration: underline chartreuse;
+} 
+
+/* Cache le lien sur petit écran */
+.topnav .icon {
+    display: none;
+} 
+
+
+
+/* ------ style général ------ */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    background-color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    line-height: 2;
+    color: black;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+}
+
+/* container pour le contenu principal */
+.container {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+}
+
+/* taille des colonnes dans le contenu */
+.small { flex: 1 1 9%; }
+.large { flex: 1 1 82%; }
+.full { flex: 1 1 100%; }
+.half { 
+    flex: 1 1 49%; 
+    display: flex; 
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* style des titres */
+h2 {
+    font-size: 1.5em;
+    padding-bottom: 5px;
+}
+
+/* style des paragraphes */
+p {
+    margin: 1em 0; /* Ajout d'une marge autour des paragraphes */
+    text-align: justify;
+}
+.sidetext {
+    flex: 1; /* Ensures text takes up space */
+    min-width: 40%; /* Prevents text from shrinking too much */
+}
+
+.sidetext-container {
+    display: flex;
+    flex-direction: row; /* Ensures side-by-side layout */
+    justify-content: space-between; /* Ensures space between text and image */
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px; /* Prevents it from stretching too much on large screens */
+}
+
+.photolegend {
+    font-size: smaller;
+    margin-top: 0%;
+}
+
+.sideimage {
+    flex: 1; /* Ensures image takes up space */
+    display: flex;
+    justify-content: center; /* Centers the image */
+}
+
+.sideimage img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* fiches artistes */
+.fiche_artiste {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+.titre_artiste {
+    align-content: center;
+    justify-content: center;
+}
+.titre_artiste h2 {
+    justify-content: center;
+    align-content: center;
+}
+
+.image_artiste {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+.image_artiste img {
+    max-width: 25%;
+    height: auto;
+}
+.artist_table {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-content: center;
+}
+.artist_table img {
+    max-width: 20%;
+    height: auto;
+}
+
+/* fiches oeuvres */
+.fiche_oeuvre {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ----- liens ------ */
+a {
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: underline chartreuse;
+}
+
+/* ------ footer ------- */
+footer {
+    background-color: white;
+    color: black;
+    line-height: 0.5;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 15px 0;
+    padding-bottom: 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 40px;
+}
+
+footer p {
+    font-size: smaller;
+    text-align: center;
+}
+
+/* ---------------------------------------------------- */
+/* Media Query pour petits écrans */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 10px; /* Moins de padding sur les petits écrans */
+        flex-direction: column;
+        align-items: center;
+    }
+    .sidetext-container {
+        flex-direction: column; /* Stack text and image on top of each other */
+        align-items: center;
+        text-align: center;
+    }
+
+    .sidetext {
+        width: 90%; /* Ensures it takes most of the screen */
+        min-width: unset; /* Reset min-width */
+    }
+
+    .sideimage {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .sideimage img {
+        width: 90%; /* Make the image smaller on small screens */
+        max-width: 400px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .topnav a {
+        display: none; /* cache liens sauf icône */
+    }
+
+    .topnav .icon {
+        display: block;
+        float: left;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    /* montrer tous les liens quand le menu est actif */
+    .topnav.responsive a {
+        display: block;
+        text-align: left;
+    }
+}

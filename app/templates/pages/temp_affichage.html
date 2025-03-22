@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Œuvres d'artiste</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .artwork { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; }
+        .title { font-weight: bold; font-size: 18px; }
+        .info { margin-top: 5px; color: #555; }
+    </style>
+</head>
+<body>
+    <h1>Liste des titres d'œuvres</h1>
+<p>Nombre d'œuvres : {{ count }}</p>
+
+{% if titles %}
+    <ul>
+    {% for title in titles %}
+        <li>{{ loop.index }}. {{ title }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucune œuvre trouvée pour cet artiste.</p>
+{% endif %}
+</body>
+</html>

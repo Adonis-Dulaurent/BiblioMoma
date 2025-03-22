@@ -72,9 +72,3 @@ Camille BATARD - camille.batard@chartes.psl.eu
 Juliette BENGUIGUI - juliette.benguigui@chartes.psl.eu
 
 Adonis DULAURENT - adonis.dulaurent@chartes.psl.eu
-
-# TEMP
-
-<!--a href="{{ url_for('panier') }}" class="ms-3">
-                    <img src="{{ url_for('static', filename='images/panier.png') }}" alt="Panier" width="30">
-                </a-->
