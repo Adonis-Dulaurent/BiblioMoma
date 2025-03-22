@@ -1,0 +1,79 @@
+{% extends "partials/conteneur.html" %}
+
+{% block title %}Ma Collection Bibliographique | Bibliomoma{% endblock %}
+
+{% block contenu %}
+
+<div class="container">
+    <h1 class="my-4">Ma Collection Bibliographique</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    {% if bibliographies %}
+        <div class="accordion" id="bibliographieAccordion">
+            {% for biblio in bibliographies %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ biblio.id }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#collapse{{ biblio.id }}" aria-expanded="false" 
+                            aria-controls="collapse{{ biblio.id }}">
+                        {{ biblio.artiste.nom }} - Bibliographie
+                        <small class="ms-2 text-muted">(Ajoutée le {{ biblio.date_ajout.strftime('%d/%m/%Y') }})</small>
+                    </button>
+                </h2>
+                <div id="collapse{{ biblio.id }}" class="accordion-collapse collapse" 
+                     aria-labelledby="heading{{ biblio.id }}" data-bs-parent="#bibliographieAccordion">
+                    <div class="accordion-body">
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="{{ url_for('supprimer_bibliographie', biblio_id=biblio.id) }}" 
+                               class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> Retirer
+                            </a>
+                        </div>
+                        <div class="bibliography-content">
+                            <pre class="text-wrap">{{ biblio.bibliographie }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-between my-4">
+            <a href="{{ url_for('accueil') }}" class="btn btn-secondary">Continuer la recherche</a>
+            <button class="btn btn-success" id="exportButton">Exporter toutes les bibliographies</button>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Votre collection bibliographique est vide. Recherchez des artistes et utilisez le bouton "Ajouter à ma bibliographie" 
+            sur leurs pages de détail pour générer des bibliographies.
+        </div>
+    {% endif %}
+</div>
+
+{% if bibliographies %}
+<script>
+document.getElementById('exportButton').addEventListener('click', function() {
+    let content = '';
+    {% for biblio in bibliographies %}
+    content += '=== {{ biblio.artiste.nom }} ===\n\n{{ biblio.bibliographie|replace("\n", "\\n") }}\n\n';
+    {% endfor %}
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ma_bibliographie_moma.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
+</script>
+{% endif %}
+{% endblock %}
