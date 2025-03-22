@@ -47,11 +47,44 @@
             </div>
         </div>
         {% endfor %}
-            <div class="biblio_artiste">
-                <h2>Bibliography</h2>
-                <p>En attente</p>
-            </div>
-
-        </div>
     </div>
+        <!-- BOUTON POUR CHARGER LA BIBLIOGRAPHIE -->
+        <button id="loadBiblio" data-id="{{ artist.WikiID }}">📚 VOIR LA BIBLIOGRAPHIE 📚</button>
+
+        <!-- Zone où la bibliographie va s'afficher -->
+        <div id="bibliographyContainer"></div>
+    </div>
+
+    <script>
+        document.getElementById("loadBiblio").addEventListener("click", function() {
+            let idArtist = this.getAttribute("data-id");
+            let biblioContainer = document.getElementById("bibliographyContainer");
+
+            fetch(`/artistes/${idArtist}/bibliography`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        biblioContainer.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                        return;
+                    }
+
+                    let biblioHTML = "<h2>Bibliographie</h2><ul>";
+                    data.forEach(book => {
+                        biblioHTML += `
+                            <li>
+                                <strong>${book.Title}</strong> (${book.Publication_year})  
+                                <br>
+                                OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
+                            </li>`;
+                    });
+                    biblioHTML += "</ul>";
+
+                    biblioContainer.innerHTML = biblioHTML;
+                })
+                .catch(error => {
+                    biblioContainer.innerHTML = `<p style="color:red;">Erreur lors du chargement de la bibliographie.</p>`;
+                    console.error("Erreur:", error);
+                });
+        });
+    </script>
 {% endblock %}
