@@ -1,7 +1,7 @@
 from datetime import datetime
-from ..app import app, db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from ..app import app, db, login
 
 class User(UserMixin, db.Model):
     __tablename__ = "user"
@@ -65,3 +65,58 @@ def identification(pseudo, password, email):
         return utilisateur
     return None
 
+class Panier(db.Model):
+    __tablename__="panier"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_ajout = db.Column(db.DateTime, default=datetime.utcnow)
+    bibliographie = db.Column(db.Text) # stocke les bibliographie generer par OpenAlex
+
+    # Relation avec d'autre table 
+    user = db.relationship('User', backref=db.backref('paniers', lazy=True))
+
+    @staticmethod
+    def ajouter_au_panier(user_id, bibliographie):
+        """Ajoute une nouvelle bibliographie au panier de l'utilisateur si elle n'existe pas déjà"""
+        # Vérifier si une bibliographie identique existe déjà dans le panier de l'utilisateur
+        item_existant = Panier.query.filter_by(user_id==user_id, bibliographie==bibliographie).first()
+        
+        if item_existant:
+            item_existant.bibliographie = bibliographie
+            item_existant.date_ajout = datetime.utcnow()
+
+            try: 
+                db.session.commit()
+                return True, "Bibliographie Mise à jour avec succès"
+            except Exception as erreur:
+                return False, str(erreur)
+        else: 
+            #Créer une novuelle entrée 
+            nouvelle_biblio = Panier(
+                user_id = user_id,
+                bibliographie = bibliographie
+            )
+            try: 
+                db.session.add(nouvelle_biblio)
+                db.session.commit()
+                return True, "Bibliographie ajoutée avec succès"
+            except Exception as erreur:
+                return False, str(erreur)
+
+    @staticmethod
+    def supprimer_bibliographie(biblio_id, user_id):
+        item = Panier.query.filter_by(id==biblio_id, user_id==user_id)
+
+        if not item: 
+            return False, "Cette bibliographie n'est pas dans votre collection"
+
+        try: 
+            db.session.delete(item)
+            db.session.commit()
+            return True, "Bibliographie retiré de votre collection"
+        except Exception as erreur: 
+            return False, str(erreur)
+    
+    @staticmethod
+    def obtenir_panier_utilisateur(user_id):
+        return Panier.query.filter_by(user_id=user_id).all()
