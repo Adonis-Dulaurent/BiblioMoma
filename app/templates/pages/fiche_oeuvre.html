@@ -22,6 +22,7 @@
         </div>
 
         <!-- BOUTON POUR CHARGER LA BIBLIOGRAPHIE -->
+
         <label for="numResults">Nombre de résultats :</label>
         <input type="number" id="numResults" value="10" min="1" max="50">    
         <button id="loadBiblio" data-id="{{ details.id }}">📚 Voir la Bibliographie</button>
@@ -33,6 +34,7 @@
     <script>
         document.getElementById("loadBiblio").addEventListener("click", function() {
             let idOeuvre = this.getAttribute("data-id");
+
             let numResults = document.getElementById("numResults").value;
             let biblioContainer = document.getElementById("bibliographyContainer");
 
@@ -45,6 +47,7 @@
                     }
 
                     let biblioHTML = "<h2>Bibliographie</h2><ol>";
+
                     data.forEach(book => {
                         biblioHTML += `
                             <li>
@@ -53,6 +56,7 @@
                                 OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
                             </li>`;
                     });
+
                     biblioHTML += "</ol>";
 
                     biblioContainer.innerHTML = biblioHTML;

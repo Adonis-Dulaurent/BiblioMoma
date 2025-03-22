@@ -94,9 +94,9 @@ def fiche_artiste(id_artist):
             img = artist.images[0].Link  # Ici on prend la première image, l'important est d'en avoir une si elle existe
             
     
-     
     return render_template(
         "pages/fiche_artiste.html", 
+        artist=artist,
         bio=bio,
         genres=genres_list,
         movements=movements_list,

@@ -1,4 +1,5 @@
 from ..app import app, db
+from .generales import *
 from flask import render_template, abort
 from flask import jsonify, request
 from sqlalchemy import text 
@@ -6,6 +7,7 @@ from ..models.mapping import *
 
 
 import requests
+from flask import jsonify
 from flask import jsonify
 
 @app.route('/oeuvres/<id_oeuvre>/bibliography')
@@ -31,6 +33,8 @@ def get_oeuvre_biblio(id_oeuvre):
         "OpenAlex_ID": book.get("id"),
         "Title": book.get("title"),
         "Publication_year": book.get("publication_year")
+
+      
     } for book in data.get("results", [])[:limit]]
     return jsonify(results)
 
@@ -61,6 +65,7 @@ def get_artiste_biblio(id_artist):
         "OpenAlex_ID": book.get("id"),
         "Title": book.get("title"),
         "Publication_year": book.get("publication_year")
+
     } for book in data.get("results", [])[:limit]]
 
     return jsonify(results)
