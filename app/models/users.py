@@ -64,3 +64,9 @@ def identification(pseudo, password, email):
     if utilisateur and check_password_hash(utilisateur.password, password):
         return utilisateur
     return None
+
+
+class Panier (db.Model):
+    __tablename__="panier"
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = 
