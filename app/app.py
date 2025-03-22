@@ -13,4 +13,5 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 login = LoginManager(app)
 
-from .routes import generales, users
+
+from .routes import generales, users, routes_juliette
