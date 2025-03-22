@@ -15,14 +15,17 @@
                 <a href="{{ url_for('fiche_artiste', id_artist=details.ArtistWikiID) }}">
                     {{ details.Artist }}
                 </a> 
-                in {{ details.BeginningDate }} - {{ details.EndDate }}, is a work housed in the {{ details.Department }} department.
+                in {{ details.BeginningDate }} - {{ details.EndDate }}, is a work housed in the {{ details.Department }}.
             </p>
             
             <p>Classified under the {{ details.Classification }} category, it was acquired by the MoMA in {{ details.DateAcquired }} through {{ details.CreditLine }}. This piece, made with {{ details.Medium }}, measures {{ details.Dimensions }}.</p>
         </div>
 
         <!-- BOUTON POUR CHARGER LA BIBLIOGRAPHIE -->
-        <button id="loadBiblio" data-id="{{ details.id }}">📚 VOIR LA BIBLIOGRAPHIE 📚</button>
+
+        <label for="numResults">Nombre de résultats :</label>
+        <input type="number" id="numResults" value="10" min="1" max="50">    
+        <button id="loadBiblio" data-id="{{ details.id }}">📚 Voir la Bibliographie</button>
 
         <!-- Zone où la bibliographie va s'afficher -->
         <div id="bibliographyContainer"></div>
@@ -31,9 +34,11 @@
     <script>
         document.getElementById("loadBiblio").addEventListener("click", function() {
             let idOeuvre = this.getAttribute("data-id");
+
+            let numResults = document.getElementById("numResults").value;
             let biblioContainer = document.getElementById("bibliographyContainer");
 
-            fetch(`/oeuvres/${idOeuvre}/bibliography`)
+            fetch(`/oeuvres/${idOeuvre}/bibliography?limit=${numResults}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -41,7 +46,8 @@
                         return;
                     }
 
-                    let biblioHTML = "<h2>Bibliographie</h2><ul>";
+                    let biblioHTML = "<h2>Bibliographie</h2><ol>";
+
                     data.forEach(book => {
                         biblioHTML += `
                             <li>
@@ -50,7 +56,8 @@
                                 OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
                             </li>`;
                     });
-                    biblioHTML += "</ul>";
+
+                    biblioHTML += "</ol>";
 
                     biblioContainer.innerHTML = biblioHTML;
                 })

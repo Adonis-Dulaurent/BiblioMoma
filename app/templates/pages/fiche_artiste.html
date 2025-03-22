@@ -47,28 +47,40 @@
             </div>
         </div>
         {% endfor %}
-    </div>
-        <!-- BOUTON POUR CHARGER LA BIBLIOGRAPHIE -->
-        <button id="loadBiblio" data-id="{{ artist.WikiID }}">📚 VOIR LA BIBLIOGRAPHIE 📚</button>
+            <div class="biblio_artiste">
+                <h2>Bibliography</h2>
+            </div>
 
         <!-- Zone où la bibliographie va s'afficher -->
         <div id="bibliographyContainer"></div>
     </div>
 
+    </div>
+
+    <label for="numResults">Nombre de résultats :</label>
+    <input type="number" id="numResults" value="10" min="1" max="50">
+    <button id="loadBiblio" data-id="{{ bio[0].WikiID }}">📚 Voir la Bibliographie</button>
+
+    <!-- Zone où la bibliographie va s'afficher -->
+    <div id="bibliographyContainer"></div>
+    </div>
+
     <script>
         document.getElementById("loadBiblio").addEventListener("click", function() {
             let idArtist = this.getAttribute("data-id");
-            let biblioContainer = document.getElementById("bibliographyContainer");
 
-            fetch(`/artistes/${idArtist}/bibliography`)
+            let numResults = document.getElementById("numResults").value;
+            let biblioContainer = document.getElementById("bibliographyContainer");
+        
+            fetch(`/artistes/${idArtist}/bibliography?limit=${numResults}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
                         biblioContainer.innerHTML = `<p style="color:red;">${data.error}</p>`;
                         return;
                     }
-
-                    let biblioHTML = "<h2>Bibliographie</h2><ul>";
+        
+                    let biblioHTML = "<h2>Bibliographie</h2><ol>";
                     data.forEach(book => {
                         biblioHTML += `
                             <li>
@@ -77,8 +89,7 @@
                                 OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
                             </li>`;
                     });
-                    biblioHTML += "</ul>";
-
+                    biblioHTML += "</ol>"
                     biblioContainer.innerHTML = biblioHTML;
                 })
                 .catch(error => {
