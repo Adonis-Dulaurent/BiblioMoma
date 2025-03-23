@@ -2,21 +2,21 @@
     {{ form.hidden_tag() }}
 
     <div class="form-group">
-        <label for="pseudo">Pseudo de l'utilisateur</label>
+        <label for="pseudo">User Name</label>
         {{form.pseudo(class_="form-control", placeholder_=pseudo)}}
-        <small id ="pseudo" class="form-text text-muted">Entrer le pseudo de l'utilisateur</small>
+        <small id ="pseudo" class="form-text text-muted">Enter the user Name</small>
     </div>
     
     <div class="form-group">
-        <label for="email">Mail de l'utilisateur</label>
+        <label for="email">email adress</label>
         {{form.email(class_="form-control", placeholder_=email)}}
-        <small id="email" class="form-text text-muted">Entrer l'email de l'utilisateur</small>
+        <small id="email" class="form-text text-muted">Please enter the email adress </small>
     </div>
 
     <div class="form-group">
-        <label for="password">Mot de passe</label>
+        <label for="password">password</label>
         {{form.password(class_="form-control", placeholder_=password)}}
-        <small id="password" class="form-text text-muted">Entrer le mot de passe</small>
+        <small id="password" class="form-text text-muted">please enter the password</small>
     </div>
 
     <p><input type="submit" value="Ajouter"></p>

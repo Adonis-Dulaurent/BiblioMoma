@@ -5,7 +5,7 @@
 {% block contenu %}
 
 <div class="container">
-    <h1 class="my-4">Ma Collection Bibliographique</h1>
+    <h1 class="my-4">My Library Collection</h1>
     
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -23,7 +23,7 @@
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
                             data-bs-target="#collapse{{ biblio.id }}" aria-expanded="false" 
                             aria-controls="collapse{{ biblio.id }}">
-                        <small class="ms-2 text-muted">(Ajoutée le {{ biblio.date_ajout.strftime('%d/%m/%Y') }})</small>
+                        <small class="ms-2 text-muted">(add at {{ biblio.date_ajout.strftime('%d/%m/%Y') }})</small>
                     </button>
                 </h2>
                 <div id="collapse{{ biblio.id }}" class="accordion-collapse collapse" 
@@ -31,7 +31,7 @@
                     <div class="accordion-body">
                         <div class="d-flex justify-content-end mb-3">
                             <a href="{{ url_for('supprimer_du_panier', panier_id=biblio.id) }}" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i> Retirer
+                                <i class="fas fa-trash"></i> Remove
                             </a>
                             
                         </div>
@@ -44,13 +44,13 @@
             {% endfor %}
         </div>
         <div class="d-flex justify-content-between my-4">
-            <a href="{{ url_for('accueil') }}" class="btn btn-secondary">Continuer la recherche</a>
-            <button class="btn btn-success" id="exportButton">Exporter toutes les bibliographies</button>
+            <a href="{{ url_for('accueil') }}" class="btn btn-secondary">Continuate search/a>
+            <button class="btn btn-success" id="exportButton">Export all bibliographies</button>
         </div>
     {% else %}
         <div class="alert alert-info">
-            Votre collection bibliographique est vide. Recherchez des artistes et utilisez le bouton "Ajouter à ma bibliographie" 
-            sur leurs pages de détail pour générer des bibliographies.
+            Your bibliographic collection is empty. Search for artists and use the “Add to my library" button 
+            on their detail pages to generate bibliographies.
         </div>
     {% endif %}
 </div>
