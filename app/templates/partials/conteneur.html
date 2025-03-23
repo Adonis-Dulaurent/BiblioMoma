@@ -9,33 +9,38 @@
     {% block js %}{% endblock %}
 </head>
 
-<body>
-     <header>
-          <h1><a href="index.html">BiblioMoMA</a></h1>
-         <nav class="topnav" id="myTopnav">
-            <a href="/" class="active">Home</a>
-            <a href="/guide">Instructions</a>
-            <a href="#">The MoMA in 100 artworks and artists</a>
-            <a href="#">Advanced search</a>
-            <a href="/documentation">Documentation and reproductibility</a>
-            <div class="dropdown">
-                <button class="dropbtn">Compte 
-                  <i class="fa fa-caret-down"></i>
-                </button>
-                <div class="dropdown-content">
-                  <a href="{{ url_for('ajout_utilisateur') }}">S'inscrire</a>
-                  {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('deconnexion') }}">Se déconnecter</a>
-                    <span class="user-status">Connecté en tant que {{ current_user.pseudo }}</span>
-                  {% else %}
-                    <a href="{{ url_for('connexion') }}">Se connecter</a>
-                    <span class="user-status">Non connecté</span>
-                  {% endif %}
-                </div>
-              </div>
-              <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">☰</a>
-            </nav>
-          </header>
+<<body>
+  <header>
+       <h1><a href="index.html">BiblioMoMA</a></h1>
+      <nav class="topnav" id="myTopnav">
+         <a href="/" class="active">Home</a>
+         <a href="/guide">Instructions</a>
+         <a href="#">The MoMA in 100 artworks and artists</a>
+         <a href="#">Advanced search</a>
+         <a href="/documentation">Documentation and reproductibility</a>
+
+         <!--Menu compte avec dropddown-->
+         <div class="dropddown">
+           <button class="dropbtn">My account
+             <i class="fa fa-caret-down"></i>
+           </button>
+           <div class="dropddown-content">
+             {% if current_user.is_authenticated %}
+              <span class="user-status">Connected as {{ current_user.pseudo }}</span>
+               <a href="{{ url_for('deconnexion') }}">log out</a>
+               <a href="{{ url_for('afficher_panier') }}">basket</a>
+             {% else %}
+               <span class="user-status">Not connected</span>
+               <a href="{{ url_for('connexion') }}">Login</a>
+               <a href="{{ url_for('ajout_utilisateur') }}">Sign up</a>
+             {% endif %}
+           </div>
+         </div>
+
+
+           <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">☰</a>
+         </nav>
+       </header>
 
 
     <script> /* Le menu ne s'affiche pas correctement sur mobile sans bidouiller javascript */

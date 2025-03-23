@@ -19,7 +19,7 @@ def ajout_utilisateur():
 
         if statut is True: 
             flash("Ajout effectué", "success")
-            return redirect(url_for("index"))
+            return redirect(url_for("guide"))
         else:
             flash(",".join(donnees), "error")
             return render_template("pages/ajout_utilisateur.html", form=form)
