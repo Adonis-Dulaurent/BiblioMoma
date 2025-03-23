@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Tuple, List, Optional, Union
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy import and_
 from ..app import app, db, login
 
 class User(UserMixin, db.Model):
@@ -74,18 +75,10 @@ class User(UserMixin, db.Model):
 def get_user_by_id(id) -> int:
     return User.query.get(int(id))
 
-"""
-@staticmethod
-def identification(pseudo, password, email):
-    utilisateur = User.query.filter(User.pseudo == pseudo, User.email == email).first()
-    if utilisateur and check_password_hash(utilisateur.password, password):
-        return utilisateur
-    return None
-"""
 
 class Panier(db.Model):
     __tablename__="panier"
-    id : int  = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id : int = db.Column(db.Integer, unique=True, nullable=False, primary_key=True, autoincrement=True)
     user_id : int = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date_ajout : datetime = db.Column(db.DateTime, default=datetime.utcnow)
     bibliographie : str = db.Column(db.Text) # stocke les bibliographie generer par OpenAlex
@@ -106,8 +99,8 @@ class Panier(db.Model):
             Tuple[bool, str]: _description_
         """
         # Vérifier si une bibliographie identique existe déjà dans le panier de l'utilisateur
-        item_existant = Panier.query.filter_by(user_id==user_id, bibliographie==bibliographie).first()
-        
+        item_existant = Panier.query.filter(Panier.user_id == user_id, Panier.bibliographie == bibliographie).first()        
+
         if item_existant:
             item_existant.bibliographie = bibliographie
             item_existant.date_ajout = datetime.utcnow()
@@ -131,28 +124,21 @@ class Panier(db.Model):
                 return False, str(erreur)
 
     @staticmethod
-    def supprimer_bibliographie(biblio_id : int, user_id : int) -> Tuple[bool, str]:
-        """_summary_
+    def supprimer_du_panier(panier_id: int, user_id: int) -> Tuple[bool, str]:
+        
+        item = Panier.query.filter_by(id=panier_id, user_id=user_id).first()
 
-        Args:
-            biblio_id (int): _description_
-            user_id (int): _description_
-
-        Returns:
-            Tuple[bool, str]: _description_
-        """
-        item = Panier.query.filter_by(id==biblio_id, user_id==user_id)
-
-        if not item: 
+        if not item:
             return False, "Cette bibliographie n'est pas dans votre collection"
 
-        try: 
+        try:
             db.session.delete(item)
             db.session.commit()
-            return True, "Bibliographie retiré de votre collection"
-        except Exception as erreur: 
-            return False, str(erreur)
-    
-    @staticmethod
-    def obtenir_panier_utilisateur(user_id : int) -> List['Panier']:
-        return Panier.query.filter_by(user_id=user_id).all()
+            return True, "Bibliographie retirée de votre collection"
+        except Exception as erreur:
+            db.session.rollback()  # Annule la transaction en cas d'erreur
+            return False, f"Erreur lors de la suppression : {str(erreur)}"
+
+
+
+
