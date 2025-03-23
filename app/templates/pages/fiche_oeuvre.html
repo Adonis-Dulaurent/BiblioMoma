@@ -31,40 +31,49 @@
         <div id="bibliographyContainer"></div>
     </div>
 
-    <script>
-        document.getElementById("loadBiblio").addEventListener("click", function() {
-            let idOeuvre = this.getAttribute("data-id");
+  <script>
+    document.getElementById("loadBiblio").addEventListener("click", function() {
+        let idOeuvre = this.getAttribute("data-id");
+        let numResults = document.getElementById("numResults").value;
+        let biblioContainer = document.getElementById("bibliographyContainer");
 
-            let numResults = document.getElementById("numResults").value;
-            let biblioContainer = document.getElementById("bibliographyContainer");
+        fetch(`/oeuvres/${idOeuvre}/bibliography?limit=${numResults}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    biblioContainer.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                    return;
+                }
 
-            fetch(`/oeuvres/${idOeuvre}/bibliography?limit=${numResults}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        biblioContainer.innerHTML = `<p style="color:red;">${data.error}</p>`;
-                        return;
-                    }
+                let biblioHTML = `
+                    <h2>Bibliographie</h2>
+                    <form id="biblioForm" action="/ajouter_au_panier" method="POST">
+                        <ol>`;
 
-                    let biblioHTML = "<h2>Bibliographie</h2><ol>";
+                data.forEach(book => {
+                    let bibliographieTexte = `${book.Title} (${book.Publication_year}) - ${book.OpenAlex_ID}`;
 
-                    data.forEach(book => {
-                        biblioHTML += `
-                            <li>
-                                <strong>${book.Title}</strong> (${book.Publication_year})  
-                                <br>
-                                OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
-                            </li>`;
-                    });
-
-                    biblioHTML += "</ol>";
-
-                    biblioContainer.innerHTML = biblioHTML;
-                })
-                .catch(error => {
-                    biblioContainer.innerHTML = `<p style="color:red;">Erreur lors du chargement de la bibliographie.</p>`;
-                    console.error("Erreur:", error);
+                    biblioHTML += `
+                        <li>
+                            <input type="checkbox" name="bibliography" value="${bibliographieTexte}">
+                            <strong>${book.Title}</strong> (${book.Publication_year})  
+                            <br>
+                            OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
+                        </li>`;
                 });
-        });
-    </script>
+
+                biblioHTML += `
+                        </ol>
+                        <button type="submit">➕ Ajouter au panier</button>
+                    </form>`;
+
+                biblioContainer.innerHTML = biblioHTML;
+            })
+            .catch(error => {
+                biblioContainer.innerHTML = `<p style="color:red;">Erreur lors du chargement de la bibliographie.</p>`;
+                console.error("Erreur:", error);
+            });
+    });
+</script>
+
 {% endblock %}

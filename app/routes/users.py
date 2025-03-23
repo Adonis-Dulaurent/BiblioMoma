@@ -32,7 +32,7 @@ def connexion():
 
     if current_user.is_authenticated is True:
         flash("Vous êtes déjà connecté", "info")
-        return redirect(url_for("index"))
+        return redirect(url_for("guide"))
 
     if form.validate_on_submit():
         utilisateur = User.identification(
@@ -67,10 +67,46 @@ def afficher_panier():
     """
     afficher le panier de l'utilisateur 
     """
-    #verification si l'utilisateur est connecté 
-    if not current_user.is_authenticated:
+    #verification si l'utilisateur est connecté
+    user_id = current_user.id 
+    if not user_id:
         flash("You must be logged in to access your basket")
         return redirect(url_for("connexion", next=request.path))
 
-    panier = Panier.obtenir_panier_utilisateur(current_user.id)
-    return render_template('pages/panier.html', panier=panier)
+    bibliographies = Panier.query.filter_by(user_id=user_id).all()
+    return render_template('pages/panier.html', bibliographies=bibliographies)
+
+@app.route("/ajouter_au_panier", methods=["POST"])
+@login_required
+def ajouter_au_panier():
+    """
+    Permet d'ajouter une bibliographie à l'utilistateur connecté
+    """
+    user_id = current_user.id 
+    bibliographie = request.form.get("bibliography")
+
+    if not bibliographie: 
+        flash("Aucune bibliographie sélectionné.", "danger")
+        return redirect(request.referrer)
+
+    success, message = Panier.ajouter_au_panier(user_id, bibliographie)
+
+    if success: 
+        flash("Bibliographie ajouté avec succès !", "succès")
+    else : 
+        flash(f"Erreur : {message}", "danger")
+
+    return redirect(request.referrer)
+
+@app.route("/supprimer_du_panier/<int:panier_id>")
+@login_required
+def supprimer_du_panier(panier_id):
+    
+    success, message = Panier.supprimer_du_panier(panier_id, current_user.id)
+    
+    if success:
+        flash(message, "success")
+    else:
+        flash(message, "error")
+    
+    return redirect(url_for('afficher_panier'))

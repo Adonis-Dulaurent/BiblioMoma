@@ -68,7 +68,6 @@
     <script>
         document.getElementById("loadBiblio").addEventListener("click", function() {
             let idArtist = this.getAttribute("data-id");
-
             let numResults = document.getElementById("numResults").value;
             let biblioContainer = document.getElementById("bibliographyContainer");
         
@@ -80,16 +79,25 @@
                         return;
                     }
         
-                    let biblioHTML = "<h2>Bibliographie</h2><ol>";
+                    let biblioHTML = `
+                    <h2>Bibliographie</h2>
+                    <form id="biblioForm" action="/ajouter_au_panier" method="POST">
+                        <ol>`;
+
                     data.forEach(book => {
                         biblioHTML += `
                             <li>
+                                <input type="checkbox" name="bibliography" value="${book.Title}">
                                 <strong>${book.Title}</strong> (${book.Publication_year})  
                                 <br>
                                 OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
                             </li>`;
                     });
-                    biblioHTML += "</ol>"
+                     biblioHTML += `
+                        </ol>
+                        <button type="submit">➕ Ajouter au panier</button>
+                    </form>`;
+
                     biblioContainer.innerHTML = biblioHTML;
                 })
                 .catch(error => {
