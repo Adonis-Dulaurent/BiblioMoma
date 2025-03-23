@@ -4,7 +4,7 @@
     <div class="fiche_oeuvre">
     <div>
         <!-- Titre centré (nom de l'oeuvre) -->
-        <h1>{{ details.Title }}</h1>
+        <h2>{{ details.Title }}</h1>
 
         <!-- Image principale -->
         <div class="image_oeuvre">
@@ -13,8 +13,8 @@
 
         <!-- Texte-->
         <div class="texte_oeuvre"></div>
-            <div class="mt-4">
-                <h2>Description</h2>
+            <div>
+                <h3>Description</h2>
                 <p>
                     "{{ details.Title }}", created by 
                     <a href="{{ url_for('fiche_artiste', id_artist=details.ArtistWikiID) }}">
@@ -27,7 +27,7 @@
             </div>
 
             <div class="biblio_oeuvre">
-                <h2>Bibliography</h2>
+                <h3>Bibliography</h2>
                 <p>En attente</p>
             </div>
 
