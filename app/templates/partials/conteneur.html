@@ -9,21 +9,39 @@
     {% block js %}{% endblock %}
 </head>
 
-<body>
+<<body>
+  <header>
+       <h1><a href="index.html">BiblioMoMA</a></h1>
+      <nav class="topnav" id="myTopnav">
+         <a href="/" class="active">Home</a>
+         <a href="/guide">Instructions</a>
+         <a href="#">The MoMA in 100 artworks and artists</a>
+         <a href="#">Advanced search</a>
+         <a href="/documentation">Documentation and reproductibility</a>
 
-    <!-- header -->
-     <header>
-        <h1><a href="index.html">BiblioMoMA</a></h1>
-        <nav class="topnav" id="myTopnav">
-            <a href="/" class="active">Home</a>
-            <a href="/guide">Instructions</a>
-            <a href="#">The MoMA in 100 artworks and artists</a>
-            <a href="#">Advanced search</a>
-            <a href="/documentation">Documentation and reproductibility</a>
-            <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
-                ☰</a>
-        </nav>  
-    </header> 
+         <!--Menu compte avec dropddown-->
+         <div class="dropddown">
+           <button class="dropbtn">My account
+             <i class="fa fa-caret-down"></i>
+           </button>
+           <div class="dropddown-content">
+             {% if current_user.is_authenticated %}
+              <span class="user-status">Connected as {{ current_user.pseudo }}</span>
+               <a href="{{ url_for('deconnexion') }}">log out</a>
+               <a href="{{ url_for('afficher_panier') }}">basket</a>
+             {% else %}
+               <span class="user-status">Not connected</span>
+               <a href="{{ url_for('connexion') }}">Login</a>
+               <a href="{{ url_for('ajout_utilisateur') }}">Sign up</a>
+             {% endif %}
+           </div>
+         </div>
+
+
+           <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">☰</a>
+         </nav>
+       </header>
+
 
     <script> /* Le menu ne s'affiche pas correctement sur mobile sans bidouiller javascript */
         function toggleMenu() {
@@ -35,6 +53,31 @@
           }
         }
     </script>
+    
+ <!-- Système de messages Flash -->
+ <div class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                    <div class="flash-content">
+                        {% if category == 'success' %}
+                            <span class="flash-icon">✓</span>
+                        {% elif category == 'error' %}
+                            <span class="flash-icon">✗</span>
+                        {% elif category == 'info' %}
+                            <span class="flash-icon">ℹ</span>
+                        {% else %}
+                            <span class="flash-icon">!</span>
+                        {% endif %}
+                        <span class="flash-text">{{ message }}</span>
+                    </div>
+                    <button class="flash-close" onclick="this.parentElement.style.display='none'">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
 
     <!-- contenu principal -->
     <div class="container">

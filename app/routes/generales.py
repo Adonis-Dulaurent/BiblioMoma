@@ -9,12 +9,21 @@ from sqlalchemy.orm import sessionmaker
 
 
 @app.route('/')
+@app.route('/home')
 def accueil():
     return render_template("pages/index.html")
 
 @app.route('/cent_oeuvres_artistes')
 def cent_oeuvres_artistes():
     return render_template("pages/100_oeuvres_artistes.html")
+
+@app.route('/guide')
+def guide():
+    return render_template("pages/mode_emploi.html")
+
+@app.route('/documentation')
+def documentation():
+    return render_template("pages/documentation_reproductibilite.html")
 
 
 @app.route('/test_db')
@@ -43,8 +52,6 @@ def test_mapping():
     except Exception as e:
         return {"error": str(e)}
     
-
-
 @app.route("/artistes/<id_artist>")
 def fiche_artiste(id_artist):
     """
@@ -74,7 +81,7 @@ def fiche_artiste(id_artist):
 
     movements_list = []
     genres_list = []
-    artworks_list = db.session.execute(text(f"SELECT Title, ImageURL FROM Artworks WHERE ArtistWikiID = '{id_artist}'"))
+    artworks_list = db.session.execute(text(f"SELECT Title, ImageURL, id FROM Artworks WHERE ArtistWikiID = '{id_artist}'"))
 
     img = None
 
@@ -86,8 +93,10 @@ def fiche_artiste(id_artist):
         if artist.images: 
             img = artist.images[0].Link  # Ici on prend la première image, l'important est d'en avoir une si elle existe
             
+    
     return render_template(
         "pages/fiche_artiste.html", 
+        artist=artist,
         bio=bio,
         genres=genres_list,
         movements=movements_list,
@@ -115,11 +124,3 @@ def fiche_oeuvre(id_oeuvre):
 
 
     return render_template("pages/fiche_oeuvre.html", details=oeuvre)        
-  
-@app.route('/guide')
-def guide():
-    return render_template("pages/mode_emploi.html")
-
-@app.route('/documentation')
-def documentation():
-    return render_template("pages/documentation_reproductibilite.html")

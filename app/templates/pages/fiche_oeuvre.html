@@ -2,15 +2,19 @@
 
 {% block contenu %}
     <div class="fiche_oeuvre">
+<<<<<<< HEAD
     <div>
         <!-- Titre centré (nom de l'oeuvre) -->
         <h2>{{ details.Title }}</h1>
+=======
+        <h1>{{ details.Title }}</h1>
+>>>>>>> main
 
-        <!-- Image principale -->
         <div class="image_oeuvre">
-            <img src="{{ details.ImageURL }}" alt="{{ details.Titre }}" class="img-fluid">
+            <img src="{{ details.ImageURL }}" alt="No picture available" class="img-fluid">
         </div>
 
+<<<<<<< HEAD
         <!-- Texte-->
         <div class="texte_oeuvre"></div>
             <div>
@@ -31,7 +35,74 @@
                 <p>En attente</p>
             </div>
 
+=======
+        <div class="texte_oeuvre">
+            <h2>Description</h2>
+            <p>
+                "{{ details.Title }}", created by 
+                <a href="{{ url_for('fiche_artiste', id_artist=details.ArtistWikiID) }}">
+                    {{ details.Artist }}
+                </a> 
+                in {{ details.BeginningDate }} - {{ details.EndDate }}, is a work housed in the {{ details.Department }}.
+            </p>
+            
+            <p>Classified under the {{ details.Classification }} category, it was acquired by the MoMA in {{ details.DateAcquired }} through {{ details.CreditLine }}. This piece, made with {{ details.Medium }}, measures {{ details.Dimensions }}.</p>
+>>>>>>> main
         </div>
+
+        <!-- BOUTON POUR CHARGER LA BIBLIOGRAPHIE -->
+
+        <label for="numResults">Nombre de résultats :</label>
+        <input type="number" id="numResults" value="10" min="1" max="50">    
+        <button id="loadBiblio" data-id="{{ details.id }}">📚 Voir la Bibliographie</button>
+
+        <!-- Zone où la bibliographie va s'afficher -->
+        <div id="bibliographyContainer"></div>
     </div>
-</div>
+
+  <script>
+    document.getElementById("loadBiblio").addEventListener("click", function() {
+        let idOeuvre = this.getAttribute("data-id");
+        let numResults = document.getElementById("numResults").value;
+        let biblioContainer = document.getElementById("bibliographyContainer");
+
+        fetch(`/oeuvres/${idOeuvre}/bibliography?limit=${numResults}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    biblioContainer.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                    return;
+                }
+
+                let biblioHTML = `
+                    <h2>Bibliographie</h2>
+                    <form id="biblioForm" action="/ajouter_au_panier" method="POST">
+                        <ol>`;
+
+                data.forEach(book => {
+                    let bibliographieTexte = `${book.Title} (${book.Publication_year}) - ${book.OpenAlex_ID}`;
+
+                    biblioHTML += `
+                        <li>
+                            <input type="checkbox" name="bibliography" value="${bibliographieTexte}">
+                            <strong>${book.Title}</strong> (${book.Publication_year})  
+                            <br>
+                            OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
+                        </li>`;
+                });
+
+                biblioHTML += `
+                        </ol>
+                        <button type="submit">➕ Ajouter au panier</button>
+                    </form>`;
+
+                biblioContainer.innerHTML = biblioHTML;
+            })
+            .catch(error => {
+                biblioContainer.innerHTML = `<p style="color:red;">Erreur lors du chargement de la bibliographie.</p>`;
+                console.error("Erreur:", error);
+            });
+    });
+</script>
+
 {% endblock %}

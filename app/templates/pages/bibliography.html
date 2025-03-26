@@ -1,0 +1,21 @@
+
+{% extends "partials/conteneur.html" %}
+{% block contenu %}
+{% include "pages/fiche_oeuvre.html"%}
+<h1>Bibliographie</h1>
+    {% if results %}
+        <ul>
+            {% for book in results %}
+                <li>
+                    <strong>{{ book["Title"] }}</strong> ({{ book["Publication year"] }})  
+                    <br>
+                    OpenAlex ID: <a href="{{ book['OpenAlex ID'] }}" target="_blank">{{ book['OpenAlex ID'] }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune publication trouvée.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

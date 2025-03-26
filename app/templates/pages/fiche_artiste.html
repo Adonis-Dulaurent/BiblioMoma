@@ -9,7 +9,7 @@
 
         <!-- Image principale -->
         <div class="image_artiste">
-            <img src="{{ image }}" alt="{{ data.DisplayName }}" class="img-fluid">
+            <img src="{{ image }}" alt="No picture available in the database 🚫" class="img-fluid">
         </div>
 
         <!-- Texte-->
@@ -37,7 +37,7 @@
                                 {{ artwork[0] }}
                             </a>
                             <br>
-                            <img src="{{ artwork[1] }}" alt="{{ artwork[0] }}" class="img-fluid">
+                            <img src="{{ artwork[1] }}" alt="No picture available in the database 🚫" class="img-fluid">
                         </li>
                         {% endfor %}
                     </ul>
@@ -49,9 +49,61 @@
         {% endfor %}
             <div class="biblio_artiste">
                 <h2>Bibliography</h2>
-                <p>En attente</p>
             </div>
 
-        </div>
+        <!-- Zone où la bibliographie va s'afficher -->
+        <div id="bibliographyContainer"></div>
     </div>
+
+    </div>
+
+    <label for="numResults">Nombre de résultats :</label>
+    <input type="number" id="numResults" value="10" min="1" max="50">
+    <button id="loadBiblio" data-id="{{ bio[0].WikiID }}">📚 Voir la Bibliographie</button>
+
+    <!-- Zone où la bibliographie va s'afficher -->
+    <div id="bibliographyContainer"></div>
+    </div>
+
+    <script>
+        document.getElementById("loadBiblio").addEventListener("click", function() {
+            let idArtist = this.getAttribute("data-id");
+            let numResults = document.getElementById("numResults").value;
+            let biblioContainer = document.getElementById("bibliographyContainer");
+        
+            fetch(`/artistes/${idArtist}/bibliography?limit=${numResults}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        biblioContainer.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                        return;
+                    }
+        
+                    let biblioHTML = `
+                    <h2>Bibliographie</h2>
+                    <form id="biblioForm" action="/ajouter_au_panier" method="POST">
+                        <ol>`;
+
+                    data.forEach(book => {
+                        biblioHTML += `
+                            <li>
+                                <input type="checkbox" name="bibliography" value="${book.Title}">
+                                <strong>${book.Title}</strong> (${book.Publication_year})  
+                                <br>
+                                OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
+                            </li>`;
+                    });
+                     biblioHTML += `
+                        </ol>
+                        <button type="submit">➕ Ajouter au panier</button>
+                    </form>`;
+
+                    biblioContainer.innerHTML = biblioHTML;
+                })
+                .catch(error => {
+                    biblioContainer.innerHTML = `<p style="color:red;">Erreur lors du chargement de la bibliographie.</p>`;
+                    console.error("Erreur:", error);
+                });
+        });
+    </script>
 {% endblock %}

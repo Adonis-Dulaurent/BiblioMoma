@@ -29,12 +29,14 @@ class Artists(db.Model):
 
     artworks = db.relationship(
         "Artworks", 
-        backref="Artists",
-    )
+        backref="Artists", 
+        lazy=True
+        )
 
     images = db.relationship(
         "ArtistsImages",
         backref="Artists",
+        lazy=True 
     )
 
     movements = db.relationship(
@@ -57,8 +59,7 @@ class Artworks(db.Model):
     __tablename__ = "Artworks"
 
     Title = db.Column(db.Text)
-    id = db.Column(db.Integer, primary_key=True) # FIXME A implémenter dans la BDD
-    Artist = db.Column(db.Text)
+    id = db.Column(db.Integer, primary_key=True)
     ConstituentID = db.Column(db.String(100))
     BeginningDate = db.Column(db.Integer)
     EndDate = db.Column(db.Integer)
@@ -70,13 +71,13 @@ class Artworks(db.Model):
     DateAcquired = db.Column(db.String(100))
     url = db.Column(db.Text)
     ImageURL = db.Column(db.Text)
+    Artist = db.Column(db.Text)
     
     # clé étrangère 
     ArtistWikiID = db.Column(
         db.String(100),
-        db.ForeignKey("Artists.WikiID")  
+        db.ForeignKey("Artists.WikiID")
     )
-    
 
     def __repr__(self):
         return f"<Artwork name={self.Title}>"
