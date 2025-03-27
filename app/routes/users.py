@@ -18,7 +18,7 @@ def ajout_utilisateur():
         )
 
         if statut is True: 
-            flash("Ajout effectué", "success")
+            flash("User added", "success")
             return redirect(url_for("guide"))
         else:
             flash(",".join(donnees), "error")
@@ -31,7 +31,7 @@ def connexion():
     form = Connexion()
 
     if current_user.is_authenticated is True:
-        flash("Vous êtes déjà connecté", "info")
+        flash("You're already logged in", "info")
         return redirect(url_for("guide"))
 
     if form.validate_on_submit():
@@ -41,11 +41,11 @@ def connexion():
             email=clean_arg(request.form.get("email", None))
         )
         if utilisateur:
-            flash("Connexion effectuée", "success")
+            flash("Logged in!", "success")
             login_user(utilisateur)
             return redirect(url_for("guide"))
         else:
-            flash("Les identifiants n'ont pas été reconnus", "error")
+            flash("Unknown identifiers", "error")
             return render_template("pages/connexion.html", form=form)
 
     else:
@@ -55,7 +55,7 @@ def connexion():
 def deconnexion():
     if current_user.is_authenticated is True:
         logout_user()
-    flash("vous êtes déconnecté", "info")
+    flash("Logged out", "info")
     return redirect(url_for("guide"))
 
 login.login_view = 'connexion'
@@ -86,13 +86,13 @@ def ajouter_au_panier():
     bibliographie = request.form.get("bibliography")
 
     if not bibliographie: 
-        flash("Aucune bibliographie sélectionné.", "danger")
+        flash("No bibliography selected.", "danger")
         return redirect(request.referrer)
 
     success, message = Panier.ajouter_au_panier(user_id, bibliographie)
 
     if success: 
-        flash("Bibliographie ajouté avec succès !", "succès")
+        flash("Bibliography added successfully!", "succès")
     else : 
         flash(f"Erreur : {message}", "danger")
 
