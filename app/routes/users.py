@@ -1,5 +1,9 @@
-from flask import url_for, render_template, redirect, request, flash
+from flask import url_for, render_template, redirect, request, flash, send_file
 from flask_login import login_user, current_user, logout_user, login_required
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+import io
 from ..models.users import User, Panier
 from ..models.formulaires import AjoutUtilisateur, Connexion
 from ..utils.transformations import clean_arg
@@ -110,3 +114,59 @@ def supprimer_du_panier(panier_id):
         flash(message, "error")
     
     return redirect(url_for('afficher_panier'))
+
+@app.route("/exporter_bibliographies", methods=["POST"])
+@login_required
+def exporter_bibliographies():
+    """
+    Exporter toutes les bibligraphies de l'utilisateur connecté au format pdf
+    """
+
+    user_id = current_user.id
+    bibliographies = Panier.query.filter_by(user_id=user_id).all()
+
+    if not bibliographies:
+        flash("No bibliography to export", "warning")
+        return redirect(request.referrer) 
+
+    # Création d'un buffer en mémoire pour le pdf
+    buffer = io.BytesIO()
+
+    #Créer le document pdf 
+    doc = SimpleDocTemplate(buffer, pagesizes=letter)
+    styles = getSampleStyleSheet()
+
+    # liste pour stocker les éléments pdf 
+    story = []
+    
+    #Titre du document 
+    title = Paragraph("My Bibliography", styles['Title'])
+    story.append(title)
+    story.append(Spacer(1,12))
+
+    #Ajouter a chaque bibliographie
+    for biblio in bibliographies:
+
+        #Date d'ajout : 
+        biblio_date = Paragraph(f"Ajouté le : {biblio.date_ajout.strftime('%d/%m/%Y %H:%M')}", styles['Normal'])
+        story.append(biblio_date)
+
+        #contenu bibliographie
+        biblio_content =Paragraph(biblio.bibliographie, styles['Normal'])
+        story.append(biblio_content)
+
+        # Espacement entre les items
+        story.append(Spacer(1,12))
+
+    #Génération de la biblio 
+    doc.build(story)
+
+    buffer.seek(0)
+
+    #téléchargement 
+    return send_file(
+        buffer,
+        mimetype='application/pdf',
+        as_attachment=True, 
+        download_name='ma_bibliotheque.pdf'
+    )
