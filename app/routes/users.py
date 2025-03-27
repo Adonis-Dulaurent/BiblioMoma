@@ -35,7 +35,7 @@ def connexion():
     form = Connexion()
 
     if current_user.is_authenticated is True:
-        flash("Vous êtes déjà connecté", "info")
+        flash("You are already logged in", "info")
         return redirect(url_for("guide"))
 
     if form.validate_on_submit():
@@ -45,11 +45,11 @@ def connexion():
             email=clean_arg(request.form.get("email", None))
         )
         if utilisateur:
-            flash("Connexion effectuée", "success")
+            flash("Connection completed", "success")
             login_user(utilisateur)
             return redirect(url_for("guide"))
         else:
-            flash("Les identifiants n'ont pas été reconnus", "error")
+            flash("Identifiers not recognized", "error")
             return render_template("pages/connexion.html", form=form)
 
     else:
@@ -59,7 +59,7 @@ def connexion():
 def deconnexion():
     if current_user.is_authenticated is True:
         logout_user()
-    flash("vous êtes déconnecté", "info")
+    flash("you're disconnected", "info")
     return redirect(url_for("guide"))
 
 login.login_view = 'connexion'
@@ -87,16 +87,17 @@ def ajouter_au_panier():
     Permet d'ajouter une bibliographie à l'utilistateur connecté
     """
     user_id = current_user.id 
-    bibliographie = request.form.get("bibliography")
+    bibliographies = request.form.getlist("bibliography[]")
 
-    if not bibliographie: 
+    if not bibliographies: 
         flash("Aucune bibliographie sélectionné.", "danger")
         return redirect(request.referrer)
 
-    success, message = Panier.ajouter_au_panier(user_id, bibliographie)
+    for bibliographie in bibliographies:
+         success, message = Panier.ajouter_au_panier(user_id, bibliographie)
 
     if success: 
-        flash("Bibliographie ajouté avec succès !", "succès")
+        flash("Bibliography successfully added!", "succès")
     else : 
         flash(f"Erreur : {message}", "danger")
 
@@ -146,10 +147,6 @@ def exporter_bibliographies():
 
     #Ajouter a chaque bibliographie
     for biblio in bibliographies:
-
-        #Date d'ajout : 
-        biblio_date = Paragraph(f"Ajouté le : {biblio.date_ajout.strftime('%d/%m/%Y %H:%M')}", styles['Normal'])
-        story.append(biblio_date)
 
         #contenu bibliographie
         biblio_content =Paragraph(biblio.bibliographie, styles['Normal'])
