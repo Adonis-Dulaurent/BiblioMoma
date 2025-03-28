@@ -2,68 +2,78 @@
 
 {% block contenu %}
     <div class="fiche_artiste">
-    <div class="titre_artiste">
+    <table class="artist_table">
+        <tr><th colspan="2">
+            <div class="titre_artiste">
         <!-- Titre centré (nom de l'artiste ou de l'oeuvre) -->
          {% for data in bio %}
-        <h2>{{ data.DisplayName }}</h1>
-
+        <h2>{{ data.DisplayName }}</h2>
+        </th></tr>
+        
         <!-- Image principale -->
+        <tr><td colspan="2">
         <div class="image_artiste">
             <img src="{{ image }}" alt="No picture available in the database 🚫" class="img-fluid">
         </div>
+        </td></tr>
 
         <!-- Texte-->
         <div class="texte_artiste"></div>
-            <div class="artist_table">
-                <h2>Description</h2>
-                <p>{{data.DisplayName}} is a {{data.Nationality}} artist who was born in {{data.BirthDate}} and passed away in {{data.DeathDate}}.
-                    <h4>Affiliated artistic mouvements</h4>
+            <div>
+                
+                <tr><th>Description</th>
+                    <td>{{data.DisplayName}} is a {{data.Nationality}} artist who was born in {{data.BirthDate}} and passed away in {{data.DeathDate}}.</td>
+                </tr>
+                    <tr>
+                    <th>Affiliated artistic mouvements</th>
                     {% for movement in movements %}
-                    <li>
-                        <ul>{{movement}}</ul>
-                    </li>
+                    <td>
+                        {{movement}}
+                    </td>
                     {% endfor %}
-                    <h4>Affiliated genres</h4>
+                </tr>
+                <tr>
+                    <th>Affiliated genres</th>
+                    <td>
                     {% for genre in genres %}
-                    <li>
-                        <ul>{{genre}}</ul>
-                    </li>
+                       <ul>{{genre}} </ul> 
+                    
                     {% endfor %}
-                    <h4>Artworks</h4>
-                    <ul>
+                </td>
+                </tr>
+                <tr>
+                    <th>Artworks</th>
+                    <td>
                         {% for artwork in artworks %}
-                        <li>
+                        
                             <a href="{{ url_for('fiche_oeuvre', id_oeuvre=artwork[2]) }}">
                                 {{ artwork[0] }}
                             </a>
                             <br>
                             <img src="{{ artwork[1] }}" alt="No picture available in the database 🚫" class="img-fluid">
-                        </li>
+                        
                         {% endfor %}
-                    </ul>
+                    </td>
+                </tr>
+                </table>
 
 
             </p>
             </div>
         </div>
         {% endfor %}
-            <div class="biblio_artiste">
+        <div class="bibliography">
                 <h2>Bibliography</h2>
-            </div>
+        </div>
 
-        <!-- Zone où la bibliographie va s'afficher -->
-        <div id="bibliographyContainer"></div>
-    </div>
-
-    </div>
-
-    <label for="numResults">Nombre de résultats :</label>
-    <input type="number" id="numResults" value="10" min="1" max="50">
-    <button id="loadBiblio" data-id="{{ bio[0].WikiID }}">📚 Voir la Bibliographie</button>
+        <div class="biblio_set">
+            <label for="numResults" class="element">Number of results: </label>
+            <input type="number" id="numResults" value="10" min="1" max="50" class="element">
+            <button id="loadBiblio" data-id="{{ bio[0].WikiID }}" class="element"> 📚 See bibliography</button>
+        </div>
 
     <!-- Zone où la bibliographie va s'afficher -->
-    <div id="bibliographyContainer"></div>
-    </div>
+    <div id="bibliographyContainer" class="biblio_contents"></div>
 
     <script>
         document.getElementById("loadBiblio").addEventListener("click", function() {
@@ -80,7 +90,7 @@
                     }
         
                     let biblioHTML = `
-                    <h2>Bibliographie</h2>
+                    <h3>Your bibliography</h3>
                     <form id="biblioForm" action="/ajouter_au_panier" method="POST">
                         <ol>`;
 
@@ -95,14 +105,18 @@
                     });
                      biblioHTML += `
                         </ol>
-                        <button type="submit">➕ add to basket </button>
+
+                        <button type="submit">➕ Add to basket</button>
+
                     </form>`;
 
                     biblioContainer.innerHTML = biblioHTML;
                 })
                 .catch(error => {
-                    biblioContainer.innerHTML = `<p style="color:red;">Error loading bibliography</p>`;
-                    console.error("Erreur:", error);
+
+                    biblioContainer.innerHTML = `<p style="color:red;">Error while loading the bibliography.</p>`;
+                    console.error("Error:", error);
+
                 });
         });
     </script>

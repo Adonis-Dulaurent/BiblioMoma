@@ -9,38 +9,38 @@
     {% block js %}{% endblock %}
 </head>
 
-<<body>
+<body>
   <header>
-       <h1><a href="index.html">BiblioMoMA</a></h1>
-      <nav class="topnav" id="myTopnav">
+             
+        <!--Menu compte avec dropddown-->
+        <div class="dropddown">
+          <button class="dropbtn" onclick="toggleDropdown()">My account
+            <i class="fa fa-caret-down"></i>
+        </button>
+          <div class="dropddown-content">
+            {% if current_user.is_authenticated %}
+             <span class="user-status">Connected as {{ current_user.pseudo }}</span>
+              <a href="{{ url_for('deconnexion') }}">Log out</a>
+              <a href="{{ url_for('afficher_panier') }}">Basket</a>
+            {% else %}
+              <span class="user-status">Not connected</span>
+              <a href="{{ url_for('connexion') }}">Login</a>
+              <a href="{{ url_for('ajout_utilisateur') }}">Sign up</a>
+            {% endif %}
+          </div>
+        </div>
+
+       <h1><a href="/">BiblioMoMA</a></h1>
+
+       <nav class="topnav" id="myTopnav">
          <a href="/" class="active">Home</a>
          <a href="/guide">Instructions</a>
-         <a href="#">The MoMA in 100 artworks and artists</a>
-         <a href="#">Advanced search</a>
+         <a href="/cent_oeuvres_artistes">The MoMA in 100 artworks and artists</a>
+         <a href="/recherche_avancee">Advanced search</a>
          <a href="/documentation">Documentation and reproductibility</a>
-
-         <!--Menu compte avec dropddown-->
-         <div class="dropddown">
-           <button class="dropbtn">My account
-             <i class="fa fa-caret-down"></i>
-           </button>
-           <div class="dropddown-content">
-             {% if current_user.is_authenticated %}
-              <span class="user-status">Connected as {{ current_user.pseudo }}</span>
-               <a href="{{ url_for('deconnexion') }}">log out</a>
-               <a href="{{ url_for('afficher_panier') }}">basket</a>
-             {% else %}
-               <span class="user-status">Not connected</span>
-               <a href="{{ url_for('connexion') }}">Login</a>
-               <a href="{{ url_for('ajout_utilisateur') }}">Sign up</a>
-             {% endif %}
-           </div>
-         </div>
-
-
-           <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">☰</a>
-         </nav>
-       </header>
+         <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">☰</a>
+      </nav>
+  </header>
 
 
     <script> /* Le menu ne s'affiche pas correctement sur mobile sans bidouiller javascript */
@@ -52,7 +52,27 @@
             x.className = "topnav";
           }
         }
-    </script>
+    </script> 
+
+  <script>
+    function toggleDropdown() {
+      var dropdown = document.querySelector(".dropddown-content");
+      dropdown.classList.toggle("show");
+    }
+
+  // Close the dropdown if the user clicks outside
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn') && !event.target.closest('.dropddown')) {
+          var dropdowns = document.getElementsByClassName("dropddown-content");
+          for (var i = 0; i < dropdowns.length; i++) {
+              if (dropdowns[i].classList.contains('show')) {
+                  dropdowns[i].classList.remove('show');
+              }
+          }
+      }
+    }
+  </script>
+
     
  <!-- Système de messages Flash -->
  <div class="flash-container">

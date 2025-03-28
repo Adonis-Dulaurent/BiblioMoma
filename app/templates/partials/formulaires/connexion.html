@@ -2,22 +2,22 @@
     {{ form.hidden_tag() }}
     
     <div class="form-group">
-        <label for="pseudo">user Name</label>
+        <label for="pseudo">Username</label>
         {{form.pseudo(class_="form-control", placeholder_=pseudo)}}
-        <small id ="pseudo" class="form-text text-muted">user Name</small>
+        <small id ="pseudo" class="form-text text-muted">Enter your username</small>
     </div>
 
     <div class="form-group">
         <label for="email">Email</label>
         {{form.email(class_="form-control", placeholder_=email)}}
-        <small id="email" class="form-text text-muted">Entrer the email adress</small>
+        <small id="email" class="form-text text-muted">Enter your email adress</small>
     </div>
 
 
     <div class="form-group">
-        <label for="password">password</label>
+        <label for="password">Password</label>
         {{ form.password(class_="form-control", placeholder_="password") }}
-        <small id="password" class="form-text text-muted">Entrer the password</small>
+        <small id="password" class="form-text text-muted">Enter your password</small>
     </div>
 
     <p><input type="submit" value="Ajouter"></p>

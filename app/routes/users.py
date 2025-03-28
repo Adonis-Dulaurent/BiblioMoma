@@ -32,7 +32,9 @@ def ajout_utilisateur() -> Union[str,Response]:
         )
 
         if statut is True: 
-            flash("Added", "success")
+
+            flash("User added", "success")
+
             return redirect(url_for("guide"))
         else:
             flash(",".join(donnees), "danger")
@@ -56,7 +58,9 @@ def connexion() -> Union[str, Response]:
     form = Connexion()
 
     if current_user.is_authenticated is True:
-        flash("You are already logged in", "info")
+
+        flash("You're already logged in", "info")
+
         return redirect(url_for("guide"))
 
     if form.validate_on_submit():
@@ -66,11 +70,13 @@ def connexion() -> Union[str, Response]:
             email=clean_arg(request.form.get("email", None))
         )
         if utilisateur:
-            flash("Connection completed", "success")
+
+            flash("Logged in!", "success")
             login_user(utilisateur)
             return redirect(url_for("guide"))
         else:
-            flash("Identifiers not recognized", "danger")
+            flash("Unknown identifiers", "error")
+
             return render_template("pages/connexion.html", form=form)
 
     else:
@@ -88,7 +94,9 @@ def deconnexion() -> Response:
     """
     if current_user.is_authenticated is True:
         logout_user()
-    flash("you're disconnected", "info")
+
+    flash("Logged out", "info")
+
     return redirect(url_for("guide"))
 
 #Défintion de la page de connexion par défaut avec flah login
@@ -130,10 +138,12 @@ def ajouter_au_panier() -> Response:
           puis redirection avec un message de succès ou d'erreur selon les cas.
     """
 
+
     user_id : int = current_user.id 
     bibliographies : list[str] = request.form.getlist("bibliography[]")
 
     if not bibliographies: 
+
         flash("No bibliography selected.", "danger")
         return redirect(request.referrer)
 
@@ -141,7 +151,9 @@ def ajouter_au_panier() -> Response:
          success, message = Panier.ajouter_au_panier(user_id, bibliographie)
 
     if success: 
-        flash("Bibliography successfully added!", "success")
+
+        flash("Bibliography added successfully!", "succès")
+
     else : 
         flash(f"Erreur : {message}", "danger")
 

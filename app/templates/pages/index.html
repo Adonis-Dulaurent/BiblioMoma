@@ -1,16 +1,16 @@
 {% extends "partials/conteneur.html" %}
-{% block body %}
+{% block contenu %}
 <!-- section principale -->
 <main>
-    <div class="row">
+    <div class="container">
         <!-- Texte à gauche -->
-        <div class="col-md-6">
+        <div class="sidetext">
             <h2>Présentation</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in bibendum arcu. Nullam at ligula
                 turpis. Morbi sit amet sollicitudin sapien. Curabitur sit amet nisi dolor. Aliquam erat volutpat.</p>
         </div>
         <!-- Carrousel d'images à droite -->
-        <div class="col-md-6">
+        <div class="carousel">
             <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     {% set active_class = "active" %}
@@ -41,7 +41,7 @@
     </div>
    
     <!-- Barre de recherche et lien vers la recherche avancée-->
-    <div class="text-center mt-5">
+    <div class="container">
         <input type="text" class="form-control w-50" placeholder="Rechercher...">
         <a href="recherche_avancee" class="btn btn-secondary">Recherche avancée</a>
     </div>

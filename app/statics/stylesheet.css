@@ -6,10 +6,12 @@
 /* ------ header ------ */
 header {
     padding: 20px;
+    display: flex;
     width: 100%;
     background-color: white;
     text-align: left;
     flex-shrink: 0;
+    flex-direction: column;
 }
 
 header h1 {
@@ -25,6 +27,7 @@ header h1 a {
     color: black;
 }
 
+/* Navigation */
 .topnav {
     margin-top: 8px;
     overflow: hidden;
@@ -51,7 +54,46 @@ header h1 a {
     display: none;
 } 
 
+/* DROPDOWN MENU */
+.dropddown {
+    position: absolute;
+    right: 20px;
+    display: inline-block;
+}
 
+.dropddown-content {
+    display: none; /* Hides the dropdown by default */
+    position: absolute;
+    right: 0;
+    background-color: white;
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 150px;
+    z-index: 1000;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Show dropdown when active */
+.dropddown-content.show {
+    display: block;
+}
+
+.dropddown-content a, .user-status {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropbtn {
+    transition-duration: 0.4s;
+}
+
+.dropbtn:hover {
+  background-color: chartreuse; /* Green */
+  color: black;
+}
 
 /* ------ style général ------ */
 html, body {
@@ -137,25 +179,38 @@ p {
     height: auto;
 }
 
+/* tables fiches */
+table {
+    border-collapse: collapse;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+td, th {
+    border: 0.5px solid black;
+    text-align: center;
+    padding: 5px;
+}
+th {
+    background-color: #f1f1f1;
+}
+
 /* fiches artistes */
 .fiche_artiste {
     display: flex;
     flex-direction: column;
     align-content: center;
+    justify-content: center;
 }
 .titre_artiste {
     align-content: center;
     justify-content: center;
 }
-.titre_artiste h2 {
-    justify-content: center;
-    align-content: center;
-}
 
 .image_artiste {
     display: flex;
     flex: 1;
-    justify-content: center;
+    justify-content: center
 }
 .image_artiste img {
     max-width: 25%;
@@ -168,8 +223,9 @@ p {
     justify-content: center;
     align-content: center;
 }
-.artist_table img {
-    max-width: 20%;
+
+.img-fluid {
+    max-width: 50%;
     height: auto;
 }
 
@@ -177,7 +233,27 @@ p {
 .fiche_oeuvre {
     display: flex;
     flex-direction: column;
+    padding: 20px;
 }
+
+/* biliographie */
+.bibliography {
+    padding: 20px;
+}
+.biblio_contents {
+    padding: 40px;
+}
+.biblio_set {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+.element{margin-left: 10px}
+.element:last-child{ margin-left: 40px } /* pour mettre de l'espace entre les éléments */
+
 
 /* ----- liens ------ */
 a {
