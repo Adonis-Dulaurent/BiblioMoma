@@ -97,7 +97,7 @@
                     data.forEach(book => {
                         biblioHTML += `
                             <li>
-                                <input type="checkbox" name="bibliography" value="${book.Title}">
+                                <input type="checkbox" name="bibliography[]" value="${book.Title}">
                                 <strong>${book.Title}</strong> (${book.Publication_year})  
                                 <br>
                                 OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
@@ -105,14 +105,18 @@
                     });
                      biblioHTML += `
                         </ol>
+
                         <button type="submit">➕ Add to basket</button>
+
                     </form>`;
 
                     biblioContainer.innerHTML = biblioHTML;
                 })
                 .catch(error => {
+
                     biblioContainer.innerHTML = `<p style="color:red;">Error while loading the bibliography.</p>`;
                     console.error("Error:", error);
+
                 });
         });
     </script>
