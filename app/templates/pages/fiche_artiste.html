@@ -100,7 +100,12 @@
                                 <input type="checkbox" name="bibliography[]" value="${book.Title}">
                                 <strong>${book.Title}</strong> (${book.Publication_year})  
                                 <br>
+                                ${book.Authors}
+                                <br>
                                 OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
+                                <br>
+                                Type : ${book.Type} | 
+                                Is this reference open-access ? ${book.OpenAccess}
                             </li>`;
                     });
                      biblioHTML += `
