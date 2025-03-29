@@ -112,13 +112,18 @@ class Panier(db.Model):
     id : int = db.Column(db.Integer, unique=True, nullable=False, primary_key=True, autoincrement=True)
     user_id : int = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date_ajout : datetime = db.Column(db.DateTime, default=datetime.utcnow)
-    bibliographie : str = db.Column(db.Text) # stocke les bibliographie generer par OpenAlex
+    bibliographie : str = db.Column(db.Text) 
+    authors : str = db.Column(db.String, nullable=True)
+    type : str = db.Column(db.String, nullable = True)
+    open_access : str = db.Column (db.String, nullable = True)
+    date_parution : int = db.Column(db.Integer)
+    publisher : str = db.Column(db.String(255))
 
     # Relation avec d'autre table 
     user = db.relationship('User', backref=db.backref('paniers', lazy=True))
 
     @staticmethod
-    def ajouter_au_panier(user_id : int, bibliographie : str) -> Tuple[bool, str]:
+    def ajouter_au_panier(user_id : int, bibliographie : str, authors : str, type:str, open_access:str, date_parution : int, publisher : str) -> Tuple[bool, str]:
         """
         Ajoute une nouvelle bibliographie au panier de l'utilisateur si elle n'existe pas déjà.
         Si elle existe déja, on met à jour la date d'ajout.
@@ -137,6 +142,11 @@ class Panier(db.Model):
 
         if item_existant:
             item_existant.bibliographie = bibliographie
+            item_existant.authors = authors
+            item_existant.type = type
+            item_existant.open_access = open_access
+            item_existant.date_parution = date_parution
+            item_existant.publisher = publisher
             #si la bibiolgraphie existe déja, on met a jour la date d'ajout
             item_existant.date_ajout = datetime.utcnow()
 
@@ -150,7 +160,12 @@ class Panier(db.Model):
             #Créer une novuelle entrée 
             nouvelle_biblio = Panier(
                 user_id = user_id,
-                bibliographie = bibliographie
+                bibliographie = bibliographie,
+                authors=authors,
+                type=type, 
+                open_access=open_access,
+                date_parution=date_parution,
+                publisher = publisher
             )
             try: 
                 db.session.add(nouvelle_biblio)
@@ -184,5 +199,5 @@ class Panier(db.Model):
             db.session.commit()
             return True, "Bibliography removed from your collection"
         except Exception as erreur:
-            db.session.rollback()  
+            db.session.rollback() 
             return False, f"Deletion error : {str(erreur)}"

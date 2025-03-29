@@ -95,6 +95,9 @@
                         <ol>`;
 
                     data.forEach(book => {
+                        
+                        let bibliographieTexte = `${book.Title} (${book.Publication_year})`;
+
                         biblioHTML += `
                             <li>
                                 <input type="checkbox" name="bibliography[]" value="${book.Title}">
@@ -108,6 +111,11 @@
                                 <br>
                                 Type: ${book.Type} | 
                                 Access status: ${book.OpenAccess}
+                                <input type="hidden" name="authors[]" value="${book.Authors}">
+                                <input type="hidden" name="type[]" value="${book.Type}">
+                                <input type="hidden" name="open_access[]" value="${book.OpenAccess}">
+                                <input type="hidden" name="date_parution[]" value="${book.Publication_year}">
+                                <input type="hidden", name="publisher[]" value="${book.Publisher}">
                             </li>`;
                     });
                      biblioHTML += `
