@@ -95,35 +95,40 @@ def get_artiste_biblio(id_artist):
 
     return jsonify(results)
 
-
 @app.route('/recherche/<int:page>')
 def recherche(page):
     per_page = int(app.config["PER_PAGE"])
+    query = request.args.get('q', '').strip()
+    type_filtre = request.args.get('type', '').strip()
 
-    # Récupérer artistes et œuvres avec pagination
-    artists_paginated = Artists.query.paginate(page=page, per_page=per_page, error_out=False)
-    artworks_paginated = Artworks.query.paginate(page=page, per_page=per_page, error_out=False)
+    # Initialiser les requêtes SQLAlchemy
+    query_artists = Artists.query.filter(Artists.WikiID != None)
+    query_artworks = Artworks.query
 
-    # Fusionner les résultats et enlever les objets None
-    all_items = [item for item in (artists_paginated.items + artworks_paginated.items) if item]
+    # Appliquer la recherche textuelle si un mot-clé est donné
+    if query:
+        query_artists = query_artists.filter(Artists.DisplayName.ilike(f"%{query}%"))
+        query_artworks = query_artworks.filter(Artworks.Title.ilike(f"%{query}%"))
 
-    # Trier uniquement si l'objet a bien un attribut Title ou DisplayName
-    all_items_sorted = sorted(all_items, key=lambda x: getattr(x, "DisplayName", None) or getattr(x, "Title", ""))
+    # Appliquer le filtre de type
+    if type_filtre == "artistes":
+        query_artworks = Artworks.query.filter(False)  # Filtre vide
+    elif type_filtre == "oeuvres":
+        query_artists = Artists.query.filter(False)  # Filtre vide
 
-    # Gestion pagination
-    has_prev = artists_paginated.has_prev or artworks_paginated.has_prev
-    has_next = artists_paginated.has_next or artworks_paginated.has_next
-    prev_num = page - 1 if has_prev else None
-    next_num = page + 1 if has_next else None
+    # Pagination
+    artists_paginated = query_artists.paginate(page=page, per_page=per_page, error_out=False)
+    artworks_paginated = query_artworks.paginate(page=page, per_page=per_page, error_out=False)
+
+    # Fusion et tri
+    all_items = artists_paginated.items + artworks_paginated.items
+    all_items_sorted = sorted(all_items, key=lambda x: x.DisplayName if isinstance(x, Artists) else x.Title)
 
     return render_template(
         "pages/recherche.html",
         items=all_items_sorted,
-        current_page=page,
-        has_prev=has_prev,
-        has_next=has_next,
-        prev_num=prev_num,
-        next_num=next_num
+        artists=artists_paginated,
+        artworks=artworks_paginated
     )
 
 
