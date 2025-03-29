@@ -62,7 +62,7 @@
                         <ol>`;
 
                 data.forEach(book => {
-                    let bibliographieTexte = `${book.Title} (${book.Publication_year})`;
+                    let bibliographieTexte = `${book.Title}`;
 
                     biblioHTML += `
                         <li>
@@ -71,10 +71,17 @@
                             <br>
                             ${book.Authors}
                             <br>
+                            ${book.Publisher}
+                            <br>
                             OpenAlex ID: <a href="${book.OpenAlex_ID}" target="_blank">${book.OpenAlex_ID}</a>
                             <br>
                             Type: ${book.Type} | 
                             Access Status: ${book.OpenAccess}
+                            <input type="hidden" name="authors[]" value="${book.Authors}">
+                            <input type="hidden" name="type[]" value="${book.Type}">
+                            <input type="hidden" name="open_access[]" value="${book.OpenAccess}">
+                            <input type="hidden" name="date_parution[]" value="${book.Publication_year}">
+                            <input type="hidden", name="publisher[]" value="${book.Publisher}">
                         </li>`;
                 });
 

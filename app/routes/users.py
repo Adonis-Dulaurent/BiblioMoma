@@ -1,4 +1,5 @@
 from typing import Union, Optional
+from collections import Counter
 from flask import url_for, render_template, redirect, request, flash, send_file, Response
 from flask_login import login_user, current_user, logout_user, login_required
 from reportlab.lib.pagesizes import letter
@@ -141,14 +142,19 @@ def ajouter_au_panier() -> Response:
 
     user_id : int = current_user.id 
     bibliographies : list[str] = request.form.getlist("bibliography[]")
+    authors : list[str] = request.form.getlist("authors[]")
+    types : list[str] = request.form.getlist("type[]")
+    open_access : list[str] = request.form.getlist("open_access[]")
+    date_parution : list[int] = request.form.getlist("date_parution[]")
+    publisher : list [str] = request.form.getlist("publisher[]")
 
     if not bibliographies: 
 
         flash("No bibliography selected.", "danger")
         return redirect(request.referrer)
 
-    for bibliographie in bibliographies:
-         success, message = Panier.ajouter_au_panier(user_id, bibliographie)
+    for bibliographie, author, type, access, date_parution, publisher in zip(bibliographies, authors, types, open_access, date_parution, publisher):
+        success, message = Panier.ajouter_au_panier(user_id, bibliographie, author, type, access, date_parution, publisher)
 
     if success: 
 
@@ -180,20 +186,21 @@ def supprimer_du_panier(panier_id: int) -> Response:
     
     return redirect(url_for('afficher_panier'))
 
+
 @app.route("/exporter_bibliographies", methods=["POST"])
 @login_required
-def exporter_bibliographies() ->Response:
+def exporter_bibliographies() -> Response:
     """ 
-    Exporter toutes les bibligraphies de l'utilisateur connecté au format PDF.
+    Exporter toutes les bibliographies de l'utilisateur connecté au format PDF.
 
     Returns
     -------
         Response: 
-        -Si aucune bibliographie a exporter, redirection avec un messager 'danger'
-        -si bibliographie à exporter, télechargement d'un document PDF.
+        - Si aucune bibliographie à exporter, redirection avec un message 'danger'
+        - Si bibliographies à exporter, téléchargement d'un document PDF.
     """
 
-    user_id : int = current_user.id
+    user_id: int = current_user.id
     bibliographies = Panier.query.filter_by(user_id=user_id).all()
 
     if not bibliographies:
@@ -202,35 +209,35 @@ def exporter_bibliographies() ->Response:
 
     # Création d'un buffer en mémoire pour le pdf
     buffer = io.BytesIO()
-
-    #Créer le document pdf 
-    doc = SimpleDocTemplate(buffer, pagesizes=letter)
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
     styles = getSampleStyleSheet()
 
-    # liste pour stocker les éléments pdf 
+    # Liste pour stocker les éléments du PDF
     story = []
-    
-    #Titre du document 
+
+    # Titre du document
     title = Paragraph("My Bibliography", styles['Title'])
     story.append(title)
-    story.append(Spacer(1,12))
+    story.append(Spacer(1, 12))
 
-    #Ajouter a chaque bibliographie
+    # Ajout des bibliographies avec auteur et année
     for biblio in bibliographies:
+        authors = biblio.authors if hasattr(biblio, 'authors') else "Anonymous"
+        annee = str(biblio.date_parution) if hasattr(biblio, 'date_parution') and biblio.date_parution else "n.d"
+        publisher = biblio.publisher.strip() if hasattr(biblio, 'publisher') and biblio.publisher and biblio.publisher.strip() else "n.p"
 
-        #contenu bibliographie
-        biblio_content =Paragraph(biblio.bibliographie, styles['Normal'])
+
+        # Création du texte final
+        biblio_content = Paragraph(f"{authors} ({annee}). <i>{biblio.bibliographie}</i>. {publisher} ", styles['Normal'])
         story.append(biblio_content)
+        story.append(Spacer(1, 12)) 
 
-        # Espacement entre les items
-        story.append(Spacer(1,12))
-
-    #Génération du pdf
+    # Génération du PDF
     doc.build(story)
 
     buffer.seek(0)
 
-    #téléchargement 
+    # Téléchargement du fichier PDF
     return send_file(
         buffer,
         mimetype='application/pdf',
