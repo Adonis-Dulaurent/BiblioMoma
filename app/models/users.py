@@ -184,5 +184,5 @@ class Panier(db.Model):
             db.session.commit()
             return True, "Bibliography removed from your collection"
         except Exception as erreur:
-            db.session.rollback()  
+            db.session.rollback() 
             return False, f"Deletion error : {str(erreur)}"

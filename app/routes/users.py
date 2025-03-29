@@ -161,20 +161,16 @@ def ajouter_au_panier() -> Response:
 
 @app.route("/supprimer_du_panier/<int:panier_id>")
 @login_required
-def supprimer_du_panier(panier_id : int) -> Response:
+def supprimer_du_panier(panier_id: int) -> Response:
     """
     Permet de supprimer une bibliographie du panier
 
-    Args
-    -----
-        panier_id (int): identifiant de la bibliographie dans le Panier
+    Args:
+        panier_id (int): Identifiant de la bibliographie dans le panier
 
-    Returns
-    -------
-        Response: 
-        - Redirection vers la page 'afficher_panier' avec un message flasjh
+    Returns:
+        Response: Redirection vers la page 'afficher_panier' avec un message flash
     """
-
     success, message = Panier.supprimer_du_panier(panier_id, current_user.id)
     
     if success:

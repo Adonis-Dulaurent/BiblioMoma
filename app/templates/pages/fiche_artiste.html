@@ -95,6 +95,9 @@
                         <ol>`;
 
                     data.forEach(book => {
+                        
+                        let bibliographieTexte = `${book.Title} (${book.Publication_year})`;
+
                         biblioHTML += `
                             <li>
                                 <input type="checkbox" name="bibliography[]" value="${book.Title}">
