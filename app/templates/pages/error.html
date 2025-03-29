@@ -3,7 +3,8 @@
 {% block contenu %}
 
 <div>
-    <h2>Sorry, an error occured: {{ message }}</h2>
+    <h3>Sorry, an error occured: {{ message }}</h3>
+    <p>See our <a href="{{url_for('guide')}}">guide</a> for more info!</p>
 </div>
 
 {% endblock%}

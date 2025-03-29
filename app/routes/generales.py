@@ -75,7 +75,7 @@ def fiche_artiste(id_artist):
     artist = Artists.query.filter(Artists.WikiID == id_artist).first()
     
     if not artist:
-        return render_template("pages/error.html", message="Artist not found! Maybe their work are not exposed in the MoMA."), 404
+        return render_template("pages/error.html", message="Artist not found! Maybe their work are not exposed in the MoMA, or they were not referenced with their Wikidata ID."), 404
     
     bio = Artists.query.filter(Artists.WikiID == id_artist).all()
 

@@ -12,11 +12,17 @@
             <h2>Description</h2>
             <p>
                 "{{ details.Title }}", created by 
-                <a href="{{ url_for('fiche_artiste', id_artist=details.ArtistWikiID) }}">
-                    {{ details.Artist }}
-                </a> 
-                in {{ details.BeginningDate }} - {{ details.EndDate }}, is a work housed in the {{ details.Department }}.
+                {% if details.ArtistWikiID %}
+                    <a href="{{ url_for('fiche_artiste', id_artist=details.ArtistWikiID) }}">
+                        {{ details.Artist or "Unknown Artist" }}
+                    </a>
+                {% else %}
+                    {{ details.Artist or "Unknown Artist" }}
+                {% endif %}
+                in {{ details.BeginningDate or "Unknown Date" }} - {{ details.EndDate or "Unknown Date" }}, 
+                is a work housed in the {{ details.Department or "Unknown Department" }}.
             </p>
+            
             
             <p>Classified under the {{ details.Classification }} category, it was acquired by the MoMA in {{ details.DateAcquired }} through {{ details.CreditLine }}. This piece, made with {{ details.Medium }}, measures {{ details.Dimensions }}.</p>
         </div>
