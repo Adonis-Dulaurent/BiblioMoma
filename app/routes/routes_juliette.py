@@ -32,7 +32,10 @@ def get_oeuvre_biblio(id_oeuvre):
     results = [{
         "OpenAlex_ID": book.get("id"),
         "Title": book.get("title"),
-        "Publication_year": book.get("publication_year")
+        "Publication_year": book.get("publication_year"),
+        "Authors" : [author.get("author").get("display_name") for author in book.get("authorships")],
+        "Type" : book.get("type"),
+        "OpenAccess" : book.get("open_access").get("is_oa")
 
       
     } for book in data.get("results", [])[:limit]]
@@ -64,7 +67,11 @@ def get_artiste_biblio(id_artist):
     results = [{
         "OpenAlex_ID": book.get("id"),
         "Title": book.get("title"),
-        "Publication_year": book.get("publication_year")
+        "Publication_year": book.get("publication_year"),
+        "Authors" : [author.get("author").get("display_name") for author in book.get("authorships")],
+        "Type" : book.get("type"),
+        "OpenAccess" : book.get("open_access").get("is_oa")
+        
 
     } for book in data.get("results", [])[:limit]]
 

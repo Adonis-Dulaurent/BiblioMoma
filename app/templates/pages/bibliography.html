@@ -2,6 +2,8 @@
 {% extends "partials/conteneur.html" %}
 {% block contenu %}
 {% include "pages/fiche_oeuvre.html"%}
+<div class="container">
+<div class="bibliography">
 <h1>Bibliographie</h1>
     {% if results %}
         <ul>
@@ -17,5 +19,5 @@
         <p>Aucune publication trouvée.</p>
     {% endif %}
 </div>
-
+</div>
 {% endblock %}

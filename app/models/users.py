@@ -14,10 +14,20 @@ class User(UserMixin, db.Model):
 
     @staticmethod
     def identification(pseudo : str, password : str, email : str) -> Optional['User']:
-        """_summary_
+        """
+        Identifie un utilisateur en vérifiant son pseudo et son email dans la base de données,
+        puis compare le mot de passe saisi avec celui stocké.
 
-        Returns:
-            _type_: _description_
+        Args
+        ----
+            -Pseudo (str): Le pseudo de l'utilisateur.
+            -password (str): Le mot de passe de l'utilisateur.
+            -email (str): L'email de l'utilisateur 
+
+        Returns
+        --------
+            Optional['User']:
+                - L'utilisateur correspondant si les identifiants sont valides, sinon None
         """
         utilisateur = User.query.filter(User.pseudo == pseudo, User.email == email).first()
         if utilisateur and check_password_hash(utilisateur.password, password):
@@ -25,31 +35,35 @@ class User(UserMixin, db.Model):
         return None
 
     @staticmethod
-    def ajout(pseudo : str, password : str, email : str):
-        """_summary_
+    def ajout(pseudo : str, password : str, email : str) -> Tuple[bool, List[str]]:
+        """
+        Ajouter un utilisateur a la base de données après validation des données
 
         Args:
-            pseudo (str): _description_
-            password (str): _description_
-            email (str): _description_
+            pseudo (str): Le pseudo de l'utilisateur
+            password (str): Le mot de passe de l'utilisateur
+            email (str): L'email de l'utilisateur 
 
-        Returns:
-            _type_: _description_
+        Returns
+        --------
+            Tuple[bool, List[str]]:
+                - Si réussi, un tuple contenant un booléen indiquant que l'ajout a réussi et une liste de succès.
+                - Si échec, une liste d'erreu
         """
         erreurs : List[str] = []
         if not pseudo:
-            erreurs.append("le pseudo est vide")
+            erreurs.append("Username is empty")
         if not password or len(password) < 6:
-            erreurs.append("Le mot de passe est vide ou trop court")
+            erreurs.append("Password is empty or too short")
         if not email:
-            erreurs.append("Il n'y a pas d'email")
+            erreurs.append("There is no email")
         
         unique = User.query.filter(
             User.pseudo == pseudo
         ).count()
         
         if unique > 0:
-            erreurs.append("Le pseudo existe déja")
+            erreurs.append("The nickname already exists")
         
         if len(erreurs) > 0:
             return False, erreurs
@@ -69,10 +83,27 @@ class User(UserMixin, db.Model):
     
     
     def get_id(self) -> int:
+        """
+        Retourne l'identifiant de l'utilisateur 
+
+        Returns:
+            int: L'identifiant de l'utilisateur.
+        """
         return self.id
     
 @login.user_loader
-def get_user_by_id(id) -> int:
+def get_user_by_id(id) -> Optional[User]:
+    """
+    Récupération de l'utilisateur par son identifiant.
+
+    Args
+    ----
+        id(int): L'identifiant de l'utilisateur 
+
+    Returns
+    -------
+        Optional[User]: L'utilisateur correspondant ou None si non trouvé.
+    """
     return User.query.get(int(id))
 
 
@@ -89,27 +120,32 @@ class Panier(db.Model):
     @staticmethod
     def ajouter_au_panier(user_id : int, bibliographie : str) -> Tuple[bool, str]:
         """
-        Ajoute une nouvelle bibliographie au panier de l'utilisateur si elle n'existe pas déjà
+        Ajoute une nouvelle bibliographie au panier de l'utilisateur si elle n'existe pas déjà.
+        Si elle existe déja, on met à jour la date d'ajout.
 
         Args:
-            user_id (int): _description_
-            bibliographie (str): _description_
+            -user_id (int): identifiant de l'utilisateur.
+            -bibliographie (str): Bibliographie a ajouter au panier
 
         Returns:
-            Tuple[bool, str]: _description_
+            Tuple[bool, str]:
+                -Statut de l'ajout (succès ou échec) et message associé.
         """
+
         # Vérifier si une bibliographie identique existe déjà dans le panier de l'utilisateur
         item_existant = Panier.query.filter(Panier.user_id == user_id, Panier.bibliographie == bibliographie).first()        
 
         if item_existant:
             item_existant.bibliographie = bibliographie
+            #si la bibiolgraphie existe déja, on met a jour la date d'ajout
             item_existant.date_ajout = datetime.utcnow()
 
             try: 
                 db.session.commit()
-                return True, "Bibliographie Mise à jour avec succès"
+                return True, "Bibliography Successfully updated"
             except Exception as erreur:
-                return False, str(erreur)
+                db.session.rollback()
+                return False, f"Deletion error : {str(erreur)}"
         else: 
             #Créer une novuelle entrée 
             nouvelle_biblio = Panier(
@@ -119,26 +155,34 @@ class Panier(db.Model):
             try: 
                 db.session.add(nouvelle_biblio)
                 db.session.commit()
-                return True, "Bibliographie ajoutée avec succès"
+                return True, "Bibliography Successfully updated"
             except Exception as erreur:
-                return False, str(erreur)
+                db.session.rollback
+                return False, f"Deletion error : {str(erreur)}"
 
     @staticmethod
     def supprimer_du_panier(panier_id: int, user_id: int) -> Tuple[bool, str]:
-        
+        """
+        Supprime une bibliographie du panier de l'utilisateur.
+
+        Args
+        ----
+            panier_id (int): L'identifiant de la bibliographie dans la table Panier.
+            user_id (int): L'identifiant de l'utilisateur 
+
+        Returns
+        -------
+            Tuple[bool, str]: Statut de la suppression (succès ou échec) et message associé
+        """
         item = Panier.query.filter_by(id=panier_id, user_id=user_id).first()
 
         if not item:
-            return False, "Cette bibliographie n'est pas dans votre collection"
+            return False, "This bibliography is not in your collection"
 
         try:
             db.session.delete(item)
             db.session.commit()
-            return True, "Bibliographie retirée de votre collection"
+            return True, "Bibliography removed from your collection"
         except Exception as erreur:
-            db.session.rollback()  # Annule la transaction en cas d'erreur
-            return False, f"Erreur lors de la suppression : {str(erreur)}"
-
-
-
-
+            db.session.rollback()  
+            return False, f"Deletion error : {str(erreur)}"
