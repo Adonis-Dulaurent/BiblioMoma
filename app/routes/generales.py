@@ -1,11 +1,12 @@
-from ..app import app, db
-from flask import render_template, abort
-from flask import jsonify
-from sqlalchemy import text 
-from ..models.mapping import *
-from sqlalchemy.orm import joinedload
-from sqlalchemy.orm import sessionmaker
 import os
+import random
+
+from flask import render_template, jsonify, request, redirect, url_for
+from sqlalchemy import text 
+
+from ..app import app, db
+from ..models.mapping import *
+
 
 
 @app.route('/')
@@ -57,6 +58,8 @@ def test_mapping():
     except Exception as e:
         return {"error": str(e)}
     
+
+
 @app.route("/artistes/<id_artist>")
 def fiche_artiste(id_artist):
     """
@@ -92,13 +95,12 @@ def fiche_artiste(id_artist):
 
     for artist in Artists.query.filter(Artists.WikiID == id_artist).all():
         for mouvement in artist.movements:
-            movements_list.append(mouvement.Label) #FIXME : ici mettre un message si pas de mouvement artistique affilié
+            movements_list.append(mouvement.Label) 
         for genre in artist.genres:
-            genres_list.append(genre.Label) #FIXME : ici mettre un message si pas de genre affilié
+            genres_list.append(genre.Label) 
         if artist.images: 
-            img = artist.images[0].Link  # Ici on prend la première image, l'important est d'en avoir une si elle existe
-            
-    
+            img = artist.images[0].Link  
+
     return render_template(
         "pages/fiche_artiste.html", 
         artist=artist,
@@ -129,3 +131,95 @@ def fiche_oeuvre(id_oeuvre):
 
 
     return render_template("pages/fiche_oeuvre.html", details=oeuvre)        
+
+
+
+@app.route('/recherche/<int:page>')
+def recherche(page):
+    """
+    Gère la recherche et la pagination des artistes et œuvres.
+    
+    Args:
+        page (int): Numéro de la page pour la pagination.
+    
+    Query Parameters:
+        q (str, optional): Terme de recherche.
+        type (str, optional): Filtre par type ('artistes' ou 'oeuvres').
+        movement (str, optional): Filtre par mouvement artistique.
+        year_filter (str, optional): Filtre par année de naissance ou de décès.
+        artist_name (str, optional): Filtre par artiste (uniquement pour les œuvres).
+    
+    Returns:
+        Flask Response: Rendu de la page "recherche.html" avec les résultats filtrés et paginés.
+    """
+    per_page = int(app.config["PER_PAGE"])
+    query = request.args.get('q', '').strip()
+    type_filtre = request.args.get('type', '').strip()
+    movement = request.args.get('movement', '').strip()
+    year_filter = request.args.get('year_filter', '').strip()
+    artist_name = request.args.get('artist_name', '').strip()
+
+    query_artists = Artists.query.filter(Artists.WikiID != None)
+    query_artworks = Artworks.query
+
+    if query:
+        query_artists = query_artists.filter(Artists.DisplayName.ilike(f"%{query}%"))
+        query_artworks = query_artworks.filter(Artworks.Title.ilike(f"%{query}%"))
+    
+    if movement:
+        query_artists = query_artists.join(ArtistsMovements).join(Movements).filter(Movements.Label.ilike(f"%{movement}%"))
+    
+    if year_filter.isdigit():
+        query_artists = query_artists.filter((Artists.BirthDate == int(year_filter)) | (Artists.DeathDate == int(year_filter)))
+    
+    if artist_name:
+        query_artworks = query_artworks.join(Artists).filter(Artists.DisplayName.ilike(f"%{artist_name}%"))
+    
+    if type_filtre == "artistes":
+        query_artworks = Artworks.query.filter(False)
+    elif type_filtre == "oeuvres":
+        query_artists = Artists.query.filter(False)
+
+    artists_paginated = query_artists.paginate(page=page, per_page=per_page, error_out=False)
+    artworks_paginated = query_artworks.paginate(page=page, per_page=per_page, error_out=False)
+
+    all_items = artists_paginated.items + artworks_paginated.items
+    all_items_sorted = sorted(all_items, key=lambda x: x.DisplayName if isinstance(x, Artists) else x.Title)
+
+    return render_template(
+        "pages/recherche.html",
+        items=all_items_sorted,
+        artists=artists_paginated,
+        artworks=artworks_paginated,
+        movements=Movements.query.all(),
+        selected_movement=movement,
+        selected_year=year_filter,
+        selected_artist=artist_name
+    )
+
+
+
+@app.route('/page-random')
+def page_random():
+    """
+    Redirige vers une fiche aléatoire d'artiste ou d'œuvre.
+
+    Returns:
+        Flask Response: Redirection vers une page "/artistes/<id>" ou "/oeuvres/<id>".
+    """
+    # Récupérer un artiste et une œuvre aléatoire
+    artist = Artists.query.order_by(db.func.random()).first()
+    artwork = Artworks.query.order_by(db.func.random()).first()
+
+    # Choisir aléatoirement entre un artiste ou une œuvre
+    if artist and artwork:
+        if random.choice([True, False]):
+            return redirect(url_for("fiche_artiste", id_artist=artist.WikiID))
+        else:
+            return redirect(url_for("fiche_oeuvre", id_oeuvre=artwork.id))
+    elif artist:
+        return redirect(url_for("fiche_artiste", id_artist=artist.WikiID))
+    elif artwork:
+        return redirect(url_for("fiche_oeuvre", id_oeuvre=artwork.id))
+    else:
+        return render_template("pages/error.html", message="No artists or artworks found."), 404
