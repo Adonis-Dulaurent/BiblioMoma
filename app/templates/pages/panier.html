@@ -20,7 +20,7 @@
         <div class="mb-4">
             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" 
                     data-bs-target="#collapseGraph" aria-expanded="false" aria-controls="collapseGraph">
-                <i class="fas fa-chart-pie me-2"></i>Afficher les statistiques
+                <i class="fas fa-chart-pie me-2"></i>View statistics
             </button>
             
             <div class="collapse mt-3" id="collapseGraph">
@@ -33,6 +33,18 @@
                         <div class="col-md-6">
                             <h5 class="mb-3">Open Access</h5>
                             <canvas id="openAccessChart" width="400" height="300"></canvas>
+                            <!-- Ajout de l'explication des catégories Open Access -->
+                            <div class="description mt-3">
+                                <h3>Open Access categories explained :</h3>
+                                <ul>
+                                    <li><strong>Diamond</strong> : Published in a fully open-access journal, at no cost to authors or readers.</li>
+                                    <li><strong>Gold</strong> : Published in a fully open-access journal.</li>
+                                    <li><strong>Green</strong> : Access for a fee on the publisher's website, but a free version is available in an open-access repository.</li>
+                                    <li><strong>Hybrid</strong> : Free under open license in a paying magazine.</li>
+                                    <li><strong>Bronze</strong> : Available free of charge on the publisher's website, but without a clearly defined license.</li>
+                                    <li><strong>Closed</strong> : All other articles not freely accessible.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
