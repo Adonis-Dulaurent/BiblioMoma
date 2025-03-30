@@ -5,49 +5,48 @@
     <div class="container">
         <!-- Texte à gauche -->
         <div class="sidetext">
-            <h2>Présentation</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in bibendum arcu. Nullam at ligula
-                turpis. Morbi sit amet sollicitudin sapien. Curabitur sit amet nisi dolor. Aliquam erat volutpat.</p>
+            <h2>Welcome to BiblioMoMA</h2>
+            <p>Get ready to start your bibliographical research in the collections of the MoMA.</p>
+            <p>To learn more about how the website works, visit <a href="/guide"><b>Instructions</b></a>.</p>
         </div>
         <!-- Carrousel d'images à droite -->
         <div class="carousel">
-            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    {% set active_class = "active" %}
-                    {% for image in images %}
-                    <div class="carousel-item {{ active_class }}">
-                        <img src="{{ url_for('static', filename='images/' + image) }}" class="d-block w-100"
-                            alt="Oeuvre {{ loop.index }}">
-                    </div>
-                    {% set active_class = "" %}
-                    {% endfor %}
+            <div class="carousel-container">
+                {% for image in images %}
+                <div class="carousel-slide">
+                    <img src="{{ url_for('static', filename='images/' + image) }}" alt="Slide">
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                {% endfor %}
             </div>
+            
+            <!-- Navigation Buttons -->
+            <button class="carousel_button" id="prevBtn">&#10094;</button>
+            <button class="carousel_button" id="nextBtn">&#10095;</button>
         </div>
+    </div> 
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <div class="container_home">
         <!-- Lien vers la page Le MoMA en 100 oeuvres et artistes -->
-        <div>
-            <p><a href="cent_oeuvres_artistes">Le MoMA en 100 oeuvres et artistes</a></p>
-        </div>
+        <h3>Features</h3>
+            <div class="gallery">
+                <a target="/cent_oeuvres_artistes" href="/cent_oeuvres_artistes">
+                  <img src="statics/images/campbell.jpg" alt="The MoMA in 100 works and artists" width="600" height="300">
+                </a>
+                <div class="desc">The MoMA in 100 works and artists</div>
+            </div>
     </div>
    
     <!-- Barre de recherche et lien vers la recherche avancée-->
-    <div class="container">
-        <input type="text" class="form-control w-50" placeholder="Rechercher...">
-        <a href="recherche_avancee" class="btn btn-secondary">Recherche avancée</a>
+    <div class="container_home_search">
+        <input type="text" placeholder="Search for an artist or artwork..." class="search_home">
+        <a href="/recherche"><b>Advanced search</b></a>
     </div>
+
     <!-- Bouton générer une page random -->
-    <div class="text-center mt-4">
-        <button class="btn btn-danger" onclick="window.location.href='/page-random'">Générer une page aléatoire</button>
+    <div class="container">
+        <button class="random_button" onclick="window.location.href='/page-random'">Go to a random page</button>
     </div>
 </main>
 {% endblock %}

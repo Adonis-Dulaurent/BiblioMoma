@@ -5,13 +5,18 @@ from sqlalchemy import text
 from ..models.mapping import *
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import sessionmaker
-
+import os
 
 
 @app.route('/')
 @app.route('/home')
 def accueil():
-    return render_template("pages/index.html")
+    image_folder = os.path.join(app.static_folder, "images")
+    images = [img for img in os.listdir(image_folder) if img.endswith((".png", ".jpg", ".jpeg", ".gif"))]
+    
+    print("Images found:", images)  # Debugging line
+    
+    return render_template("pages/index.html", images=images)
 
 @app.route('/cent_oeuvres_artistes')
 def cent_oeuvres_artistes():
