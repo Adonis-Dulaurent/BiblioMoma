@@ -1,22 +1,88 @@
 {% extends "partials/conteneur.html" %}
 
 {% block contenu %}
-    <!-- Section principale -->
+    <!-- Main Section -->
     <div class="container">
      <div class="sidetext">
-            <!-- Texte à gauche -->
+            <!-- Left Text -->
             <section class="half">
-                <h2>Documentation and reproductibility</h2>
-                <p>etc
+                <h2>Documentation and Reproducibility</h2>
+
+                <h3>Presentation</h3>
+
+                <p>This application offers a bibliographic journey by associating works and artists with resources from OpenAlex.
+                     It has been designed to be adaptable to other museums or institutions.</p>
+
+                <h3>Prerequisites</h3> 
+                <p>Before using this application, make sure you have:</p>
+                <ul>
+                    <li>Download the <a href="https://github.com/Adonis-Dulaurent/BiblioMoma">repository</a> available on GitHub and follow the ReadMe.</li>
+                    <li>A server with Python 3.9+.</li>
+                    <li>A relational database of your institution's artworks and artists.</li>
+                </ul>
+
+                <h3>Data Preparation:</h3>
+                <p>In your database, you must have:</p>
+                <ul>
+                    <li>A table <code>Artist</code> with the field: <code>DisplayName</code></li>
+                    <li>A table <code>Artworks</code> with the field: <code>Title</code></li>
+                </ul>
+                <p>Note that these fields are mandatory, but you can enrich your data with birth dates of artists.
+                    To process the data, we recommend using software like 
+                    <a href="https://orangedatamining.com/">Orange Data Mining</a> or the Python library Pandas.
                 </p>
+
+                <h3>Interface with OpenAlex</h3>
+                <p>Queries with OpenAlex are made using its <a href="https://docs.openalex.org/">API</a>. 
+                The application sends the name of the artwork or an artist using the <code>request</code> library.
+                It then retrieves the results and displays them to the user.</p>
+
+                <h3>User Management:</h3>
+                <p>To enhance user experience, we offer an authentication system 
+                    that allows users to save their bibliography, export it, and access 
+                    visualizations of their selections.</p>
+            
+                <p>For this, you need to add two tables to your database:</p>
+                <ul>
+                    <li>A table <code>user</code> with the fields: <code>id</code>, <code>pseudo</code>, 
+                        <code>password</code>, <code>email</code>.</li>
+                    <li>A table <code>cart</code> with the fields: <code>id</code>, <code>user_id</code>,
+                         <code>date_added</code>, <code>bibliography</code>, <code>authors</code>, <code>type</code>,
+                          <code>open_access</code>, <code>publication_date</code>, <code>publisher</code></li>
+                </ul>
+                <p>The first table stores users, while the second keeps
+                     their bibliographies with the necessary metadata for visualizations.</p>
+
+                <h3>Customization and Deployment:</h3>
+                <p>You can and should adapt the application:</p>
+                <ul>
+                    <li>Modify the HTML templates.</li>
+                    <li>Adjust the CSS to match your graphic charter.</li>
+                    <li>Change OpenAlex queries according to your needs.</li>
+                    <li>Deploy the application locally or on a server.</li>
+                </ul>
+                <h3> Usage by Visitors:</h3>
+                <p>Users can:</p>
+                <ul>
+                    <li>Search for artworks and artists.</li>
+                    <li>Add bibliographic references to a cart.</li>
+                    <li>Export their selections.</li>
+                </ul>
+                <h3>License and Contribution</h3>
+                <p>This application is distributed under a free license. Feel free to
+                     suggest improvements via our GitHub repository.</p>
+                <h3>Contact and Support</h3>
+                <p>For any questions regarding the implementation of BiblioMoma in your 
+                    institution or for a personalized demonstration, please contact our team at
+                     support@bibliomoma.com.</p>
             </section>
     </div>
 
     <div class="sideimage">
-            <!-- Image à droite -->
+            <!-- Image on the Right -->
             <section class="half">
-                <img src="statics/images/house_railroad.jpg" alt="House by the railroad" width="500">
-                <p class="photolegend"><i>House by the railroad</i>, Edward Hopper (1925)</p>
+                <img src="statics/images/house_railroad.jpg" alt="House by the Railroad" width="500">
+                <p class="photolegend"><i>House by the Railroad</i>, Edward Hopper (1925)</p>
             </section> 
      </div>
     </div>

@@ -20,10 +20,10 @@ def afficher_graphique_open_access() -> Response :
     user_id : int = current_user.id
     bibliographies : List[Panier] = Panier.query.filter_by(user_id=user_id).all()
 
-    categories : list [str]= ["diamond", "gold", "green", "hybrid", "bronze", "closed"]
+    categories : List [str]= ["diamond", "gold", "green", "hybrid", "bronze", "closed"]
     open_access_counts : Counter = Counter(biblio.open_access for biblio in bibliographies if biblio.open_access in categories)
 
-    data : Dict[str, int] = {category: open_access_counts.get(category, 0) for category in categories}
+    data : LIST[str] = {category: open_access_counts.get(category, 0) for category in categories}
 
     return jsonify(data) 
 
@@ -43,7 +43,7 @@ def afficher_graphique_types() -> Response:
     user_id : int = current_user.id
     bibiolgraphies : List [Panier] = Panier.query.filter_by(user_id=user_id).all()
 
-    types : Dict [str] = ["book-section", "monograph","report-component", "report", "peer-review", "book-track",
+    types : List [str] = ["book-section", "monograph","report-component", "report", "peer-review", "book-track",
      "journal-article","book-part","other", "book", "journal-volume", "book-set", "reference-entry", "proceedings-article",
      "journal", "component","book-chapter","proceedings-series", "report-series", "proceedings", "database",
      "standard", "reference-book", "posted-content", "journal-issue", "dissertation", "grant", "dataset", "book-series",
@@ -51,6 +51,6 @@ def afficher_graphique_types() -> Response:
 
     type_counts : Counter = Counter(biblio.type for biblio in bibiolgraphies if biblio.type in types)
 
-    data : Dict[str, int] = {type_: type_counts.get(type_, 0) for type_ in types}
+    data : List[str] = {type_: type_counts.get(type_, 0) for type_ in types}
 
     return jsonify(data) 
