@@ -31,6 +31,15 @@ def afficher_graphique_open_access() -> Response :
 @app.route("/graphique_types", methods=["GET"])
 @login_required
 def afficher_graphique_types() -> Response:
+    """
+    Generer les donnes bibliographique montrant la repartition des types de documents 
+    dans la bibliographie de l'utilisateur.
+
+    returns
+    -------
+    Response : Un objet JSON contenant le nombre de publications par type de document.
+    """
+
     user_id : int = current_user.id
     bibiolgraphies : List [Panier] = Panier.query.filter_by(user_id=user_id).all()
 
