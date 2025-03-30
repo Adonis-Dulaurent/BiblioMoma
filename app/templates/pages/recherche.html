@@ -2,26 +2,48 @@
 
 {% block contenu %}
 <div>
-    <h1>Recherche</h1>
+    <h1>Search</h1>
+    
     <form method="GET" action="{{ url_for('recherche', page=1) }}" class="mb-3">
-        <input type="text" name="q" placeholder="Rechercher un artiste ou une œuvre..." value="{{ request.args.get('q', '') }}">
-        
-        <select name="type">
-            <option value="">Tous</option>
-            <option value="artistes" {% if request.args.get('type') == 'artistes' %}selected{% endif %}>Artistes</option>
-            <option value="oeuvres" {% if request.args.get('type') == 'oeuvres' %}selected{% endif %}>Œuvres</option>
+        <!-- Champ de recherche principal -->
+        <input type="text" name="q" placeholder="Search for an artist or an artworks..." value="{{ request.args.get('q', '') }}">
+
+        <!-- Sélecteur pour filtrer entre artistes et œuvres -->
+        <select name="type" id="typeSelector">
+            <option value="">All</option>
+            <option value="artistes" {% if request.args.get('type') == 'artistes' %}selected{% endif %}>Artists</option>
+            <option value="oeuvres" {% if request.args.get('type') == 'oeuvres' %}selected{% endif %}>Artworks</option>
         </select>
-    
-        <button type="submit">Rechercher</button>
+
+        <!-- Filtres spécifiques aux artistes -->
+        <div id="artistFilters" style="display: none;">
+            <input type="text" name="movement" placeholder="Filter by movement..." value="{{ request.args.get('movement', '') }}">
+            
+            <select name="year_filter">
+                <option value="">-- Filter by year --</option>
+                {% for year in range(1700, 2025) | reverse %}
+                    <option value="{{ year }}" {% if request.args.get('year_filter') == year|string %}selected{% endif %}>
+                        {{ year }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Filtres spécifiques aux œuvres -->
+        <div id="artworkFilters" style="display: none;">
+            <input type="text" name="artist_name" placeholder="Search by artist..." value="{{ request.args.get('artist_name', '') }}">
+        </div>
+
+        <button type="submit">Search</button>
     </form>
-    
+
     {% if items %}
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Image</th>
-                <th scope="col">Nom / Titre</th>
+                <th scope="col">Name / Title</th>
                 <th scope="col">Date</th>
                 <th scope="col">Type</th>
             </tr>
@@ -109,4 +131,33 @@
     <p>Aucun résultat trouvé.</p>
     {% endif %}
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const typeSelector = document.getElementById("typeSelector");
+        const artistFilters = document.getElementById("artistFilters");
+        const artworkFilters = document.getElementById("artworkFilters");
+
+        function toggleFilters() {
+            if (typeSelector.value === "artistes") {
+                artistFilters.style.display = "block";
+                artworkFilters.style.display = "none";
+            } else if (typeSelector.value === "oeuvres") {
+                artistFilters.style.display = "none";
+                artworkFilters.style.display = "block";
+            } else {
+                artistFilters.style.display = "none";
+                artworkFilters.style.display = "none";
+            }
+        }
+
+        // Vérifier à l'ouverture si un type est déjà sélectionné
+        toggleFilters();
+
+        // Ajouter un écouteur pour changer l'affichage dynamiquement
+        typeSelector.addEventListener("change", toggleFilters);
+    });
+</script>
+
+
 {% endblock %}
