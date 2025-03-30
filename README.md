@@ -109,8 +109,9 @@ Si vous voulez rejoindre l'aventure BiblioMoma. Vous pouvez contribuer en suivan
 5. Créer un Pull Request 
 
 <p align="right">(<a href="#readme-top">retour en haut</a>)</p>
-## Contact
 
+<span id=#Contact></a>
+## Contact
 Sidonie BASSAISTEGUY - sidonie.bassaisteguy@chartes.psl.eu
 
 Camille BATARD - camille.batard@chartes.psl.eu
