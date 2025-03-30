@@ -4,12 +4,12 @@
 <div>
     <h1>Search</h1>
     
-    <form method="GET" action="{{ url_for('recherche', page=1) }}" class="mb-3">
+    <form method="GET" action="{{ url_for('recherche', page=1) }}">
         <!-- Champ de recherche principal -->
-        <input type="text" name="q" placeholder="Search for an artist or an artworks..." value="{{ request.args.get('q', '') }}">
+        <input type="text" name="q" placeholder="Search for an artist or an artwork..." value="{{ request.args.get('q', '') }}" class="search_field">
 
         <!-- Sélecteur pour filtrer entre artistes et œuvres -->
-        <select name="type" id="typeSelector">
+        <select name="type" id="typeSelector" class="search_filter">
             <option value="">All</option>
             <option value="artistes" {% if request.args.get('type') == 'artistes' %}selected{% endif %}>Artists</option>
             <option value="oeuvres" {% if request.args.get('type') == 'oeuvres' %}selected{% endif %}>Artworks</option>
@@ -34,11 +34,11 @@
             <input type="text" name="artist_name" placeholder="Search by artist..." value="{{ request.args.get('artist_name', '') }}">
         </div>
 
-        <button type="submit">Search</button>
+        <button type="submit" class="search_button">Search</button>
     </form>
 
     {% if items %}
-    <table class="table">
+    <table class="search_table">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -51,7 +51,7 @@
         <tbody>
             {% for item in items %}
             <tr>
-                <th scope="row">{{ loop.index }}</th>
+                <td scope="row"><b>{{ loop.index }}</b></td>
 
                 <!-- Image de l'artiste ou de l'œuvre -->
                 <td>
@@ -91,9 +91,9 @@
                 <!-- Type (Artiste ou Œuvre) -->
                 <td>
                     {% if item.DisplayName %}
-                        Artiste
+                        Artist
                     {% else %}
-                        Œuvre
+                        Artwork
                     {% endif %}
                 </td>
             </tr>

@@ -54,7 +54,7 @@ header h1 a {
     display: none;
 } 
 
-/* DROPDOWN MENU */
+/* DROPDOWN MENU pour le bouton My Account */
 .dropddown {
     position: absolute;
     right: 20px;
@@ -85,13 +85,20 @@ header h1 a {
     text-decoration: none;
     color: black;
 }
-
+/* style du bouton */
 .dropbtn {
     transition-duration: 0.4s;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+    font-weight: bold;
+    background-color: white;
+    cursor: pointer;
+    text-decoration: underline 1px solid black;
+    border: none;
 }
 
 .dropbtn:hover {
-  background-color: chartreuse; /* Green */
+  background-color: chartreuse;
   color: black;
 }
 
@@ -148,6 +155,103 @@ p {
     margin: 1em 0; /* Ajout d'une marge autour des paragraphes */
     text-align: justify;
 }
+
+/* style de la page d'accueil */
+.search_home {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    width: 70%;
+    font-size: large;
+}
+.container_home {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.container_home_search {
+    padding: 30px;
+}
+.container_home a {
+    color: black;
+    font-weight: bold;
+}
+.random_button {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+    border: black solid 0.5px;
+}
+.random_button:hover {
+    background-color: chartreuse;
+}
+
+/* Style du carrousel */
+.carousel {
+    position: relative;
+    width: 380px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.carousel-container {
+    display: flex;
+    transition: transform 2s ease-in-out;
+}
+.carousel-slide {
+    min-width: 100%;
+    transition: transform 2s;
+}
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/* style des boutons du carousel */
+.carousel_button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+#prevBtn {
+    left: 5px;
+}
+#nextBtn {
+    right: 5px;
+}
+
+/* lien stylisé vers les autres pages */
+div.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 45%;
+}  
+div.gallery:hover {
+    border: 1px solid chartreuse;
+}
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+div.desc {
+    padding: 15px;
+    text-align: center;
+    text-decoration: underline;
+}
+
+/* style des pages statiques */
 .sidetext {
     flex: 1; /* Ensures text takes up space */
     min-width: 40%; /* Prevents text from shrinking too much */
@@ -164,7 +268,7 @@ p {
 }
 
 .photolegend {
-    font-size: smaller;
+    font-size: smaller; /* légende des images en plus petit */
     margin-top: 0%;
 }
 
@@ -179,20 +283,12 @@ p {
     height: auto;
 }
 
-/* tables fiches */
-table {
-    border-collapse: collapse;
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-}
-td, th {
-    border: 0.5px solid black;
-    text-align: center;
-    padding: 5px;
-}
+/* styles généraux des tables */
 th {
     background-color: #f1f1f1;
+}
+table a {
+    color: black;
 }
 
 /* fiches artistes */
@@ -222,8 +318,17 @@ th {
     flex: 1;
     justify-content: center;
     align-content: center;
+    border: 0.5 px solid black;
+    border-collapse: collapse;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
 }
-
+.artist_table td, th {
+    border: 0.5px solid black;
+    text-align: center;
+    padding: 5px;
+}
 .img-fluid {
     max-width: 50%;
     height: auto;
@@ -254,15 +359,90 @@ th {
 .element{margin-left: 10px}
 .element:last-child{ margin-left: 40px } /* pour mettre de l'espace entre les éléments */
 
+/* Recherche */
+.search_field, .search_filter, .search_button {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+}
+
+.search_field {
+    border-radius: 5px;
+    border: solid 0.5px black;
+    width: 30%;
+}
+.search_filter {
+    border: 0.5px solid black;
+    background-color: white;
+}
+.search_button {
+    transition-duration: 0.4s;
+    border: none;
+    background-color: white;
+    text-decoration: underline;
+}
+.search_button:hover {
+    background-color: chartreuse;
+}
+.search_table {
+    padding: 15px;
+    width: 100%;
+    margin: auto;
+    border: none;
+    border-spacing: 20px;
+}
+.search_table th {
+    background-color: #f1f1f1;
+    border: none;
+}
+.search_table td {
+    background-color: white;
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+.search_table a {
+    color: black;
+}
+
+/* panier */
+.container_basket {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: left;
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+}
+.hidden {
+    display: none; /* Initially hide the content */
+}
+#content {
+    padding: 10px;
+    margin-top: 10px;
+}
+.stats_button {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: large;
+    border: 0.5px solid black;
+    padding: 10px;
+}
+.stats_button:hover {
+    background-color: chartreuse;
+}
+.basket_end_btns {
+    padding: 20px;
+}
 
 /* ----- liens ------ */
 a {
     text-decoration: underline;
+    color: black;
 }
 
 a:hover {
     text-decoration: underline chartreuse;
 }
+
 
 /* ------ footer ------- */
 footer {
