@@ -3,13 +3,25 @@
 {% block contenu %}
 <div>
     <h1>Recherche</h1>
+    <form method="GET" action="{{ url_for('recherche', page=1) }}" class="mb-3">
+        <input type="text" name="q" placeholder="Rechercher un artiste ou une œuvre..." value="{{ request.args.get('q', '') }}">
+        
+        <select name="type">
+            <option value="">Tous</option>
+            <option value="artistes" {% if request.args.get('type') == 'artistes' %}selected{% endif %}>Artistes</option>
+            <option value="oeuvres" {% if request.args.get('type') == 'oeuvres' %}selected{% endif %}>Œuvres</option>
+        </select>
+    
+        <button type="submit">Rechercher</button>
+    </form>
+    
     {% if items %}
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Image</th>
-                <th scope="col">Name / Title</th>
+                <th scope="col">Nom / Titre</th>
                 <th scope="col">Date</th>
                 <th scope="col">Type</th>
             </tr>
@@ -26,20 +38,20 @@
                     {% elif item.images and item.images[0].Link %}
                         <img src="{{ item.images[0].Link }}" alt="Artist Image" width="100">
                     {% else %}
-                        <span>No image</span>
+                        <span>Aucune image</span>
                     {% endif %}
                 </td>
 
                 <!-- Nom de l'artiste ou Titre de l'œuvre -->
                 <td>
                     {% if item.DisplayName %}
-                    <a href="{{ url_for('fiche_artiste', id_artist=item.WikiID) }}">
-                        {{ item.DisplayName }}
-                    </a>
+                        <a href="{{ url_for('fiche_artiste', id_artist=item.WikiID)}}">
+                            {{ item.DisplayName }}
+                        </a>
                     {% else %}
-                    <a href="{{ url_for('fiche_oeuvre', id_oeuvre=item.id) }}">
-                        {{ item.Title }}
-                    </a>
+                        <a href="{{ url_for('fiche_oeuvre', id_oeuvre=item.id)}}">
+                            {{ item.Title }}
+                        </a>
                     {% endif %}
                 </td>
 
@@ -57,9 +69,9 @@
                 <!-- Type (Artiste ou Œuvre) -->
                 <td>
                     {% if item.DisplayName %}
-                        Artist
+                        Artiste
                     {% else %}
-                        Artwork
+                        Œuvre
                     {% endif %}
                 </td>
             </tr>
@@ -70,24 +82,31 @@
     <!-- PAGINATION -->
     <nav aria-label="Page navigation">
         <ul class="pagination">
-            {% if has_prev %}
+            {% if artists and artists.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('recherche', page=prev_num) }}">Précédent</a>
+                    <a class="page-link" href="{{ url_for('recherche', page=artists.prev_num, q=request.args.get('q', ''), type=request.args.get('type', '')) }}">Précédent</a>
+                </li>
+            {% elif artworks and artworks.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('recherche', page=artworks.prev_num, q=request.args.get('q', ''), type=request.args.get('type', '')) }}">Précédent</a>
                 </li>
             {% endif %}
-            <li class="page-item active">
-                <span class="page-link">{{ current_page }}</span>
-            </li>
-            {% if has_next %}
+
+            {% if artists and artists.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('recherche', page=next_num) }}">Suivant</a>
+                    <a class="page-link" href="{{ url_for('recherche', page=artists.next_num, q=request.args.get('q', ''), type=request.args.get('type', '')) }}">Suivant</a>
+                </li>
+            {% elif artworks and artworks.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('recherche', page=artworks.next_num, q=request.args.get('q', ''), type=request.args.get('type', '')) }}">Suivant</a>
                 </li>
             {% endif %}
         </ul>
     </nav>
 
+
     {% else %}
-    <p>No result found.</p>
+    <p>Aucun résultat trouvé.</p>
     {% endif %}
 </div>
 {% endblock %}
