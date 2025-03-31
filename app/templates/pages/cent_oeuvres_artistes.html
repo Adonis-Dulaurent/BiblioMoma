@@ -1,9 +1,47 @@
 {% extends "partials/conteneur.html" %}
+
 {% block contenu %}
-<!-- section principale -->
-<main>
-            <h2>Cent oeuvres et artistes</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in bibendum arcu. Nullam at ligula
-                turpis. Morbi sit amet sollicitudin sapien. Curabitur sit amet nisi dolor. Aliquam erat volutpat.</p>
-</main>
+<div class="container">
+    <h1 class="text-center my-4">The MoMA in 100 random Artworks and Artists</h1>
+
+    <div class="gallery">
+        {% for item in images %}
+            {% if item.type == "artwork" %}
+                <a href="{{ url_for('fiche_oeuvre', id_oeuvre=item.id) }}" class="gallery-item">
+                    <img src="{{ item.image_url }}" alt="Image">
+                </a>
+            {% else %}
+                <a href="{{ url_for('fiche_artiste', id_artist=item.id) }}" class="gallery-item">
+                    <img src="{{ item.image_url }}" alt="Image">
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .gallery-item {
+        overflow: hidden;
+        border-radius: 10px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .gallery-item:hover {
+        transform: scale(1.05);
+    }
+</style>
 {% endblock %}
