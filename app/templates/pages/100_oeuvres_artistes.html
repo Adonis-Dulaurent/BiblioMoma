@@ -1,0 +1,14 @@
+{% extends "partials/conteneur.html" %}
+
+{% block body %}
+   <main>
+        <h1>100 Œuvres et Artistes</h1>
+    
+        {% for image in images %}
+            <div>
+                <img src="{{ image.image_url }}" alt="Image">
+            </div>
+        {% endfor %}
+    </main>
+{% endblock %}
+

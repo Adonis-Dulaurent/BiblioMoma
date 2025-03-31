@@ -19,6 +19,7 @@ def accueil():
     
     return render_template("pages/index.html", images=images)
 
+
 @app.route('/cent_oeuvres_artistes')
 def cent_oeuvres_artistes():
     oeuvres = Artworks.query.all()  
@@ -169,8 +170,6 @@ def fiche_oeuvre(id_oeuvre):
 
 
     return render_template("pages/fiche_oeuvre.html", details=oeuvre)        
-
-
 
 @app.route('/recherche/<int:page>')
 def recherche(page):
