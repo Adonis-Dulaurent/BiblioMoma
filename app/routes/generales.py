@@ -19,27 +19,32 @@ def accueil():
     
     return render_template("pages/index.html", images=images)
 
+from sqlalchemy import func
+
 @app.route('/cent_oeuvres_artistes')
 def cent_oeuvres_artistes():
-    oeuvres = Artworks.query.all()  # Récupérer toutes les œuvres
-    artistes = Artists.query.all()  # Récupérer tous les artistes
+    """
+    Affiche 100 œuvres et images d'artistes aléatoires en récupérant leurs informations depuis la base de données.
+    """
+    # Récupérer 100 œuvres aléatoires
+    oeuvres = Artworks.query.order_by(func.random()).limit(100).all()
+
+    # Récupérer 100 images d'artistes aléatoires
+    artistes_images = ArtistsImages.query.order_by(func.random()).limit(100).all()
+
     images = []
 
-    # Ajouter les images des œuvres
+    # Ajouter les œuvres à la liste des images
     for oeuvre in oeuvres:
         images.append({'type': 'oeuvre', 'image_url': oeuvre.ImageURL, 'nom': oeuvre.Title})
 
-    # Ajouter les artistes avec image
-    for artiste in artistes:
-        premiere_image = ArtistImages.query.filter_by(ArtistID=artiste.WikiID).first()
-        if premiere_image:  # Vérifier que l'image existe bien
-            images.append({'type': 'artiste', 'image_url': premiere_image.Link, 'nom': artiste.DisplayName})
-
-    # Mélanger et limiter à 100 images
-    random.shuffle(images)
-    images = images[:100]
+    # Ajouter les images des artistes à la liste des images
+    for artiste_image in artistes_images:
+        # S'assurer qu'il existe une image pour l'artiste
+        images.append({'type': 'artiste', 'image_url': artiste_image.Link, 'nom': artiste_image.Artist.DisplayName})
 
     return render_template("pages/100_oeuvres_artistes.html", images=images)
+
 
 
 @app.route('/guide')
