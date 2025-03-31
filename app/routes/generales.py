@@ -1,10 +1,11 @@
 import os
+import random
 
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, redirect, url_for
 from sqlalchemy import text 
 
-from ..models.mapping import *
 from ..app import app, db
+from ..models.mapping import *
 
 
 
@@ -56,6 +57,9 @@ def test_mapping():
         return {"artists": artist_names if artist_names else "No artist found"}
     except Exception as e:
         return {"error": str(e)}
+    
+
+
     
 
 
@@ -195,3 +199,30 @@ def recherche(page):
         selected_year=year_filter,
         selected_artist=artist_name
     )
+
+
+
+@app.route('/page-random')
+def page_random():
+    """
+    Redirige vers une fiche aléatoire d'artiste ou d'œuvre.
+
+    Returns:
+        Flask Response: Redirection vers une page "/artistes/<id>" ou "/oeuvres/<id>".
+    """
+    # Récupérer un artiste et une œuvre aléatoire
+    artist = Artists.query.order_by(db.func.random()).first()
+    artwork = Artworks.query.order_by(db.func.random()).first()
+
+    # Choisir aléatoirement entre un artiste ou une œuvre
+    if artist and artwork:
+        if random.choice([True, False]):
+            return redirect(url_for("fiche_artiste", id_artist=artist.WikiID))
+        else:
+            return redirect(url_for("fiche_oeuvre", id_oeuvre=artwork.id))
+    elif artist:
+        return redirect(url_for("fiche_artiste", id_artist=artist.WikiID))
+    elif artwork:
+        return redirect(url_for("fiche_oeuvre", id_oeuvre=artwork.id))
+    else:
+        return render_template("pages/error.html", message="No artists or artworks found."), 404
