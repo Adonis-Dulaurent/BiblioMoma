@@ -2,6 +2,7 @@
 
 {% block contenu %}
     <!-- Main Section -->
+    <div class="doc_container">
     <div class="container">
      <div class="sidetext">
             <!-- Left Text -->
@@ -16,11 +17,23 @@
                 <h3>Prerequisites</h3> 
                 <p>Before using this application, make sure you have:</p>
                 <ul>
-                    <li>Download the <a href="https://github.com/Adonis-Dulaurent/BiblioMoma">repository</a> available on GitHub and follow the ReadMe.</li>
+                    <li>Downloaded the <a href="https://github.com/Adonis-Dulaurent/BiblioMoma">repository</a> available on GitHub and followed the ReadMe.</li>
                     <li>A server with Python 3.9+.</li>
                     <li>A relational database of your institution's artworks and artists.</li>
                 </ul>
-
+             </section> 
+        </div>  
+                <div class="sideimage">
+                    <!-- Image on the Right -->
+                    <section class="half">
+                        <img src="statics/images/house_railroad.jpg" alt="House by the Railroad" width="500">
+                        <p class="photolegend"><i>House by the Railroad</i>, Edward Hopper (1925)</p>
+                    </section> 
+             </div>
+        </div>
+        
+        <div class="container">
+             <section class="full">
                 <h3>Data Preparation:</h3>
                 <p>In your database, you must have:</p>
                 <ul>
@@ -76,16 +89,11 @@
                     institution or for a personalized demonstration, please contact our team at
                      support@bibliomoma.com.</p>
             </section>
+        </div>
     </div>
 
-    <div class="sideimage">
-            <!-- Image on the Right -->
-            <section class="half">
-                <img src="statics/images/house_railroad.jpg" alt="House by the Railroad" width="500">
-                <p class="photolegend"><i>House by the Railroad</i>, Edward Hopper (1925)</p>
-            </section> 
-     </div>
-    </div>
+    
+    
     
 
 {% endblock %}
