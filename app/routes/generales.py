@@ -21,7 +21,42 @@ def accueil():
 
 @app.route('/cent_oeuvres_artistes')
 def cent_oeuvres_artistes():
-    return render_template("pages/100_oeuvres_artistes.html")
+    oeuvres = Artworks.query.all()  
+    artistes = Artists.query.all()  
+    images = []
+
+    for oeuvre in oeuvres:
+        if oeuvre and oeuvre.ImageURL: 
+            images.append({
+                'type': 'artwork', 
+                'image_url': oeuvre.ImageURL, 
+                'name': oeuvre.Title,
+                'id' : oeuvre.id
+            })
+
+    for artiste in artistes:
+        if artiste and artiste.images:
+            if isinstance(artiste.images, list) and len(artiste.images) > 0:
+                images.append({
+                    'type': 'artist',
+                    'image_url': artiste.images[0],  
+                    'name': artiste.DisplayName,
+                    'id' : artiste.WikiID
+                })
+            else:
+                images.append({
+                    'type': 'artist',
+                    'image_url': artiste.images,  
+                    'name': artiste.DisplayName,
+                    'id' : artiste.WikiID
+                })
+
+
+    random.shuffle(images)
+    images = images[:100]
+
+    return render_template("pages/cent_oeuvres_artistes.html", images=images)
+
 
 @app.route('/guide')
 def guide():
