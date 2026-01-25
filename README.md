@@ -1,7 +1,7 @@
 <a id="readme-top"></a>
 # <H1 align="center">📚BiblioMoMA🎨</H1>
 
-BiblioMoMA est une application web qui propose une visite bibliographique à travers les collections du *Museum of Modern Art*. BiblioMoMA, permet à l'utilisateur de visualiser des informations relatives à la vie et au travail d'un artiste lorsqu'il ou elle recherche ou clique sur une œuvre, ainsi qu'une vourte bibliographie académique. Simple d'accès, BiblioMoMA se veut ouvert à tous les publics, du collégien au chercheur en histoire de l'art.
+BiblioMoMA est une application web qui propose une visite bibliographique à travers les collections du *Museum of Modern Art*. BiblioMoMA, permet à l'utilisateur de visualiser des informations relatives à la vie et au travail d'un artiste lorsqu'il ou elle recherche ou clique sur une œuvre, ainsi qu'une courte bibliographie académique. Simple d'accès, BiblioMoMA se veut ouvert à tous les publics, du collégien au chercheur en histoire de l'art.
 
 <details>
   <summary>Table des matières</summary>
